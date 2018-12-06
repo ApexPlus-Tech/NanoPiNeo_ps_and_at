@@ -1,0 +1,24 @@
+<html>
+<head>
+<script src="./js/jquery.min.js"></script>
+</head>
+<script>
+function update(){
+	//console.log("Button Clicked");
+	$.ajax({
+		type:"POST",
+		url:"./cgi-enabled/test.py",
+		//data: {param:text}
+		data:{get_param:'value'},
+		dataType:'json'
+	}).done(function(response){
+	console.log(response['voltage']);
+	//console.log($('#volts'))	
+	$('#volts').html(response['voltage'])
+	});
+}
+setInterval(update,1000);
+</script>
+<label id='volts'>Something</label>
+<button onclick="buttonClicked()" >Some button</button>
+
