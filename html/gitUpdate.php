@@ -1,5 +1,5 @@
 <?php
-echo "Git update started <br/>";
+echo "Firmware update started <br/>";
 exec("python /home/pi/auxilary.py");
-echo "Git update complete<br/>";
+echo "Firmware update complete<br/>";
 ?>
