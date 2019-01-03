@@ -49,12 +49,29 @@
 		$("#"+event.srcElement.id+"_button").removeClass("btn-primary");
 		$("#"+event.srcElement.id+"_button").addClass("btn-warning");
 	}
+
+	function countdown(){
+		if(confirm("System will shutdown in 15 seconds . Do you wish to shutdown ?") ){
+			//console.log("Clicked");
+			document.getElementById('timer').style.display = 'inline';
+			 var timeleft = 15;
+    		 var downloadTimer = setInterval(function(){
+    		  timeleft--;
+    		  document.getElementById("timer").textContent = timeleft;
+    			if(timeleft <= 0)
+      		  	clearInterval(downloadTimer);
+   			 },1000);
+		}
+	}
 </script>
 <body class="bg-info"><h1 align="center"> PROTO AAAU DTRM/DRM CONTROL INTERFACE</h1>
-
+	<div style="text-align: center;">
+    <h3><span id="timer" style="display:none;" align="center">15</span></h3>
+	</div>
+<p>
 <br>
 <div class="col-sm-12">
-	<form action="shutdown.php" onsubmit="return confirm('Do you wish to shutdown ?')"  method="POST" target="hole">
+	<form action="shutdown.php" onsubmit="countdown()"  method="POST" target="hole">
 	<input type="submit" name="shutdown" value="SHUTDOWN" class="btn btn-danger" id="shutdown">
 
 </form>
