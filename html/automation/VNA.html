@@ -1,0 +1,43 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+	$(document).ready(function(){
+			$("#folder").keyup(function(){
+				//console.log("typed");
+			$("#board1").val($(this).val())
+			});
+			});
+</script>
+</head>
+<form method="POST" action="VNA.php">
+	<p>IP address 		:<input type="text" id="ipAddr" name="ipAddr"></p>
+	<p>Start Freq 		:<input type="text" id="startFreq" name="startFreq"></p>
+	<p>Stop  Freq 		:<input type="text" id="stopFreq" name="stopFreq"><br/></p>
+	<p>pulseWidth 		:<input type="text" id="pulseWidth" name="pulseWidth"><br/></p>
+	<p>Duty cycle 		:<input type="text" id="dutyCycle" name="dutyCycle"><br/></p>
+	<p>Number of points :<input type="text" id="points" name="points"><br/></p>
+	<button type="submit">Apply</button>
+</form>
+<br/>
+<br/>
+<br/>
+<form method="POST" action="measurement.php" >
+<input type="radio" name="channel" value="CH1_TX">Ch 1 TX<br/>
+<input type="radio" name="channel" value="CH2_RX">Ch 2 TX<br/>
+<input type="radio" name="channel" value="CH2_TX">Ch 1 RX<br/>
+<input type="radio" name="channel" value="CH2_RX">Ch 2 RX<br/>
+<br/>
+<br/>
+<p>Board name:<input type="text" id="folder" name="folder" required><br/></p>
+<button id="runMeasurement" type="submit" class="btn btn-info">Run measurement</button>
+</form>
+<br/>
+<br/>
+<!-- File is downloaded automatically -->
+<!-- <form method="post" action="zip.php"> -->
+			<!-- <p>Board name:<input type="text" name="folder" placeholder="Board1" id="board1" /></p> -->
+			<!-- <p><input type="submit" value="Download zip file" target="hole"></p> -->
+<!-- </form> -->
+</html>	
