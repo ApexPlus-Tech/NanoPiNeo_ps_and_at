@@ -67,7 +67,7 @@ function sendSocketCommand($cmdString,&$result){
 $channelFunction=$_POST['channel'];
 //create a folder 
 $directory=$_POST['folder'];
-$dirName="/var/www/html/boards/".$directory;
+$dirName="/var/www/automation/boards/".$directory;
 if(!is_dir($dirName)){
 		mkdir($dirName,0777,true);
 }
@@ -233,7 +233,7 @@ elseif ($channelFunction=="CH2_RX"){
 	}
 }
 $folderName=$_POST['folder'];
-$zipFileName='/var/www/html/boards/'.$folderName.'.zip';
+$zipFileName='/var/www/automation/boards/'.$folderName.'.zip';
 $zipFile=new GoodZipArchive('/var/www/html/boards/'. $folderName,$zipFileName)or die("Could not create zip file");
 header('Content-Type: application/zip');
 header("Content-Disposition: attachment; filename = $zipFileName");
@@ -241,7 +241,7 @@ header('Content-Length: ' . filesize($zipFileName));
 //header("Location:"."/boards/".basename($zipFileName)) or die("Could not open zip file");
 readfile($zipFileName);
 unlink($zipFileName);
-rmdir('var/www/html/boards/'.$folderName);
+rmdir('var/www/automation/boards/'.$folderName);
 }
 else{
 	die("incorrect response .Instrument not a PNA");
