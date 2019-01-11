@@ -37,10 +37,4 @@
 	//CONTROL FLOW#########################################################################################################################################################
 	/* guiSocket.php is my local gui page.First of all This gui page interacts with user and takes the commands and sends commands to its own server which is scripted in this file(socket.php) .This server talks to the the SCPI server and sends command to the scpi server running in some instrument.The scpi server in return sends response to our own local server.Then our server forwards the response back to the user interacting page(guiSocket.php)
 	*/
-
-
-
-
-
-
 ?>
