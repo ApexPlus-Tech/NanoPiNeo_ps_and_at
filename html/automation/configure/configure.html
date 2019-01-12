@@ -9,4 +9,10 @@
 <form method="POST" action="restart.php">
 <button type="submit">Restart</button>
 </form>
+
+<form method="POST" action="shutdown.php" onsubmit="return confirm("System will shutdown in 15 seconds , do you wish to continue" target="hole">
+<button type="submit">shutdown</button>
+<iframe id="hole" name="hole" width="0" height="0" style="visibility: hidden;"></iframe>
+</form>
+
 </html>

@@ -81,6 +81,11 @@
 	<input type="submit" name="update" value="F/W UPDATE" class="btn btn-dark" id="update">
 	</form>
 </div>
+<div class="col-sm-12">
+	<form action="restart.php" method="POST" onsubmit='confirm("Do you wish to restart?")' target="hole" >
+	<input type="submit" name="update" value="RESTART" class="btn btn-primary" id="restart">
+	</form>
+</div>
 <iframe name="hole" width="0" height="0" style="visibility:hidden"></iframe>
 <form action="kishore.php" method="POST" target="hole">
 <div class="container">
