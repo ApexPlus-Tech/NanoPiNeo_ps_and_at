@@ -2,6 +2,8 @@
 function showInstall(){
 	echo '
 	<br/>
+	Install files manually
+	<br/>
 	<div>
     <form action="upload.php" method="POST" enctype="multipart/form-data">
     <br/>

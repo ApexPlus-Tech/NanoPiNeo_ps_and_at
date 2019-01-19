@@ -9,10 +9,11 @@ if($target_file=="html.zip"){
 	else{
 		echo "Could not upload file";
 	}
-	exec("unzip -o /var/www/uploads/html.zip -d /var/www/uploads/");
+	exec("unzip -P "apexplus" -o /var/www/uploads/html.zip -d /var/www/uploads/");
 	exec("cp -TRv /var/www/uploads/html/ /var/www/");
 	exec("rm --interactive=never /var/www/uploads/html.zip");
 	exec("rm --interactive=never -r /var/www/uploads/html");
+	echo "Software has been installed";
 }
 else{
 	echo("Invalid file name");
