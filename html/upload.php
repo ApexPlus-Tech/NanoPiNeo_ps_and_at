@@ -14,7 +14,7 @@ if($target_file=="html.zip"){
 	exec("cp -TRv /var/www/uploads/html/ /var/www/");
 	exec("rm --interactive=never /var/www/uploads/html.zip");
 	exec("rm --interactive=never -r /var/www/uploads/html");
-	echo "Software has been installed";
+	echo(<script>alert("software has been installed")</script>);
 	}
 	else{
 		echo "Error unzipping the file";
