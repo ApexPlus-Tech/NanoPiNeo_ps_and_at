@@ -9,7 +9,7 @@ function showInstall(){
 	<br/>
     <input type="submit" name="update" value="INSTALL" class="btn btn-primary"/>
     </form>
-	</div>'
+	</div>';
 }
 
 exec("ping -c 4 www.google.com",$output,$result);
