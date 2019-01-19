@@ -22,7 +22,7 @@ if($result==0){//ping is successful
 		exec("cp -TRv /var/www/updated/html /var/www");
 		exec("rm -r --interactive=never /var/www/updated");
 		echo("<script>alert('Firmware update completed')</script>");
-		echo("<script>window.location='index.html'</script>")
+		echo("<script>window.location='index.html'</script>");
 	}
 	else{
 		echo("Server is down");
