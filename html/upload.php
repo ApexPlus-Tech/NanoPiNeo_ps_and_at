@@ -14,13 +14,16 @@ if($target_file=="html.zip"){
 	exec("cp -TRv /var/www/uploads/html/ /var/www/");
 	exec("rm --interactive=never /var/www/uploads/html.zip");
 	exec("rm --interactive=never -r /var/www/uploads/html");
-	echo(<script>alert("software has been installed")</script>);
+	echo("<script>alert('software has been installed')</script>");
+	echo("<script>window.location='index.html'</script>");
 	}
 	else{
-		echo "Error unzipping the file";
+		echo("<script>alert('Error unzipping the file.')</script>");
+		echo("<script>window.location='index.html'</script>");
 	}
 }
 else{
-	echo("Invalid file name");
+	echo("<script>alert('Invalid file name.')</script>");
+	echo("<script>window.location='index.html'</script>");
 }
 ?>
