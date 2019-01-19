@@ -21,7 +21,8 @@ if($result==0){//ping is successful
 	if($result==0){//git cloning is successful
 		exec("cp -TRv /var/www/updated/html /var/www");
 		exec("rm -r --interactive=never /var/www/updated");
-		echo("Firmware update completed");
+		echo("<script>alert('Firmware update completed')</script>");
+		echo("<script>window.location='index.html'</script>")
 	}
 	else{
 		echo("Server is down");
