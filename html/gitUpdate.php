@@ -4,7 +4,7 @@
 // echo "Please press back and refresh <br/>"
 //echo("<script>alert('Looking for the update .....')</script>");
 //exec("python /home/pi/auxilary.py");
-exec("ping -c 4",$output,$result);
+exec("ping -c 4 www.google.com",$output,$result);
 if($result==0){//ping is successful
 	exec("git clone htt://github.com/ApexPlus-Tech/NanoPiNeo_ps_and_at.git /var/www/updated",$output,$result);
 	echo($result);
