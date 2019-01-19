@@ -1,10 +1,14 @@
 <?php
 function showInstall(){
-	echo '<div class="col-sm-12">
-        <form action="upload.php" method="POST" enctype="multipart/form-data">
+	echo '
+	<br/>
+	<div>
+    <form action="upload.php" method="POST" enctype="multipart/form-data">
+    <br/>
 	<input type="file" name="fileToUpload" required/>
-        <input type="submit" name="update" value="INSTALL" class="btn btn-primary"/>
-        </form>
+	<br/>
+    <input type="submit" name="update" value="INSTALL" class="btn btn-primary"/>
+    </form>
 	</div>'
 }
 
