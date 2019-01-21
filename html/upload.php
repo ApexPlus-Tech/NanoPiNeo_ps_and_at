@@ -10,7 +10,7 @@ if($target_file=="alma.zip"){
 		echo "Could not upload file";
 	}
 	$f=fopen('/home/pi/password.txt','r');
-	$line=$fgets($f);
+	$line=fgets($f);
 	fclose($f);
 	$line=str_replace(array("\n","\r"),'',$line);
 	exec("unzip -P ".$line." -o /var/www/uploads/alma.zip -d /var/www/uploads/",$output,$result);
