@@ -14,7 +14,7 @@ function showInstall(){
 	</div>';
 }
 
-exec("ping -c 4 www.google.com",$output,$result);
+exec("ping -c 4 8.8.8.8",$output,$result);
 if($result==0){//ping is successful
 	exec("git clone https://github.com/ApexPlus-Tech/NanoPiNeo_ps_and_at.git /var/www/updated",$output,$result);
 	//echo($result);
