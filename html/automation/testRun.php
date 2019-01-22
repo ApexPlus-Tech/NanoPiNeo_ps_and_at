@@ -236,7 +236,7 @@ $folderName=$_POST['folder'];
 $zipFileName='/var/www/automation/boards/'.$folderName.'.zip';
 $zipFile=new GoodZipArchive('/var/www/html/boards/'. $folderName,$zipFileName)or die("Could not create zip file");
 header('Content-Type: application/zip');
-header("Content-Disposition: attachment; filename = $zipFileName");
+header('Content-Disposition: attachment; filename = "'.basename($zipFileName).'"');
 header('Content-Length: ' . filesize($zipFileName));
 //header("Location:"."/boards/".basename($zipFileName)) or die("Could not open zip file");
 readfile($zipFileName);
