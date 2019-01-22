@@ -200,7 +200,7 @@ elseif ($channelFunction=="CH2_RX"){
 		}   
 	}
 }
-echo("<script>window.location='/automation/zip.php'</script>")
+echo("<script>window.location='/automation/zip.php'</script>");
 }
 else{
 	die("incorrect response .Instrument not a PNA");
