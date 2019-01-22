@@ -4,6 +4,29 @@ $host=$_SESSION['ipAddr'];
 $_SESSION['folder']=$_POST['folder'];
 
 
+/**
+ * Output span with progress.
+ *
+ * @param $current integer Current progress out of total
+ * @param $total   integer Total steps required to complete
+ */
+function outputProgress($current, $total) {
+    echo "<span style='position: absolute;z-index:$current;background:#FFF;'>" . round($current / $total * 100) . "% </span>";
+    myFlush();
+    //sleep(1);
+}
+
+/**
+ * Flush output buffer
+ */
+function myFlush() {
+    echo(str_repeat(' ', 256));
+    if (@ob_get_contents()) {
+        @ob_end_flush();
+    }
+    flush();
+}
+
 function sendSocketCommand($cmdString,&$result){
 	$host=$GLOBALS['host'];
 	$command=$cmdString;   //This command  variable has got value from $_POST variable which has been passed from gui page by user
@@ -87,6 +110,7 @@ if ($channelFunction=="CH1_TX"){
 			$fp=fopen($dirName."/".$filename,'w');
 			fwrite($fp,$result);
 			fclose($fp);	
+			outputProgress($i*$j,4095);
 			//get sweep time and sleep for that time .
 			sleep(1);
 		}   
