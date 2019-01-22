@@ -1,40 +1,8 @@
 <?php
 session_start();
 $host=$_SESSION['ipAddr'];
-class GoodZipArchive extends ZipArchive 
-{
-	//@author Nicolas Heimann
-	public function __construct($a=false, $b=false) { $this->create_func($a, $b);  }
-	
-	public function create_func($input_folder=false, $output_zip_file=false)
-	{
-		if($input_folder && $output_zip_file)
-		{
-			$res = $this->open($output_zip_file, ZipArchive::CREATE);
-			if($res === TRUE) 	{ $this->addDir($input_folder, basename($input_folder)); $this->close(); }
-			else  				{ echo 'Could not create a zip archive. Contact Admin.'; }
-		}
-	}
-	
-    // Add a Dir with Files and Subdirs to the archive
-    public function addDir($location, $name) {
-        $this->addEmptyDir($name);
-        $this->addDirDo($location, $name);
-    }
+$_SESSION['folder']=$_POST['folder'];
 
-    // Add Files & Dirs to archive 
-    private function addDirDo($location, $name) {
-        $name .= '/';         $location .= '/';
-      // Read all Files in Dir
-        $dir = opendir ($location);
-        while ($file = readdir($dir))    {
-            if ($file == '.' || $file == '..') continue;
-          // Rekursiv, If dir: GoodZipArchive::addDir(), else ::File();
-            $do = (filetype( $location . $file) == 'dir') ? 'addDir' : 'addFile';
-            $this->$do($location . $file, $name . $file);
-        }
-    } 
-}
 
 function sendSocketCommand($cmdString,&$result){
 	$host=$GLOBALS['host'];
@@ -232,16 +200,7 @@ elseif ($channelFunction=="CH2_RX"){
 		}   
 	}
 }
-$folderName=$_POST['folder'];
-$zipFileName='/var/www/automation/boards/'.$folderName.'.zip';
-$zipFile=new GoodZipArchive('/var/www/html/boards/'. $folderName,$zipFileName)or die("Could not create zip file");
-header('Content-Type: application/zip');
-header('Content-Disposition: attachment; filename = "'.basename($zipFileName).'"');
-header('Content-Length: ' . filesize($zipFileName));
-//header("Location:"."/boards/".basename($zipFileName)) or die("Could not open zip file");
-readfile($zipFileName);
-unlink($zipFileName);
-rmdir('var/www/automation/boards/'.$folderName);
+echo("<script>window.location='/automation/zip.php'</script>")
 }
 else{
 	die("incorrect response .Instrument not a PNA");
