@@ -66,7 +66,7 @@ $directory=$_POST['folder'];
 $f=fopen("/var/www/automation/session.txt",'w') or die("Could not open text file ");
 fwrite($f,$directory);
 fclose($f);
-$dirName="/var/www/html/boards/".$directory;
+$dirName="/var/www/automation/boards/".$directory;
 if(!is_dir($dirName)){
 		mkdir($dirName,0777,true);
 }
