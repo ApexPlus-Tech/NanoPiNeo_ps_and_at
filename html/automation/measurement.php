@@ -1,39 +1,29 @@
 <?php
 session_start();
 $host=$_SESSION['ipAddr'];
-class GoodZipArchive extends ZipArchive 
-{
-	//@author Nicolas Heimann
-	public function __construct($a=false, $b=false) { $this->create_func($a, $b);  }
-	
-	public function create_func($input_folder=false, $output_zip_file=false)
-	{
-		if($input_folder && $output_zip_file)
-		{
-			$res = $this->open($output_zip_file, ZipArchive::CREATE);
-			if($res === TRUE) 	{ $this->addDir($input_folder, basename($input_folder)); $this->close(); }
-			else  				{ echo 'Could not create a zip archive. Contact Admin.'; }
-		}
-	}
-	
-    // Add a Dir with Files and Subdirs to the archive
-    public function addDir($location, $name) {
-        $this->addEmptyDir($name);
-        $this->addDirDo($location, $name);
-    }
 
-    // Add Files & Dirs to archive 
-    private function addDirDo($location, $name) {
-        $name .= '/';         $location .= '/';
-      // Read all Files in Dir
-        $dir = opendir ($location);
-        while ($file = readdir($dir))    {
-            if ($file == '.' || $file == '..') continue;
-          // Rekursiv, If dir: GoodZipArchive::addDir(), else ::File();
-            $do = (filetype( $location . $file) == 'dir') ? 'addDir' : 'addFile';
-            $this->$do($location . $file, $name . $file);
-        }
-    } 
+/**
+ * Output span with progress.
+ *
+ * @param $current integer Current progress out of total
+ * @param $total   integer Total steps required to complete
+ */
+//
+function outputProgress($current, $total,$attenuator,$phaseShifter) {
+    echo "<span style='position: absolute;z-index:$current;background:#FFF;'>" ."Attenuator:".$attenuator." PhaseShifter:".$phaseShifter." Progress:".round($current / $total * 100) . "% </span>";
+    myFlush();
+    //sleep(1);
+}
+
+/**
+ * Flush output buffer
+ */
+function myFlush() {
+    echo(str_repeat(' ', 256));
+    if (@ob_get_contents()) {
+        @ob_end_flush();
+    }
+    flush();
 }
 
 function sendSocketCommand($cmdString,&$result){
@@ -67,6 +57,9 @@ function sendSocketCommand($cmdString,&$result){
 $channelFunction=$_POST['channel'];
 //create a folder 
 $directory=$_POST['folder'];
+$f=fopen("/var/www/automation/session.txt",'w') or die("Could not open text file ");
+fwrite($f,$directory);
+fclose($f);
 $dirName="/var/www/automation/boards/".$directory;
 if(!is_dir($dirName)){
 		mkdir($dirName,0777,true);
@@ -88,160 +81,157 @@ $scpiServerCheckFlag=strpos($result,"pna");
 
 //Note use === instead of ==
 if($scpiServerCheckFlag===true  ){
-if ($channelFunction=="CH1_TX"){
-	//set TX mode 
-	$data="W AB 21\r";
-	exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-	 //only channel1 select
-	$data="W 01 1E\r";
-	exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-	for($i=0;$i<64;$i++){
-		//set attenuator value 
-		$val=$i;
-		$val=($val-31.5)*-2;
-		$val=ceil($val);
-        $data=dechex($val);
-        $data="W ".$data." 1B\r";
-        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-        $temp='attenuator'.$i;
-		for($j=0;$j<64;$j++){
-			//send phase shifter value
-			$val=$j;
-			$data=dechex($val);
-			$data="W ".$data." 1A\r";
-			exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-			$filename=$temp."_phaseShifter".$j;
-			//echo $filename;
-			$result="";
-			sendSocketCommand("INITiate1;*OPC?",$result) ;
-			sendSocketCommand("CALCulate1:DATA?FDATA",$result);
-			//store the result in a file 
-			$fp=fopen($dirName."/".$filename,'w');
-			fwrite($fp,$result);
-			fclose($fp);	
-			//get sweep time and sleep for that time .
-			sleep(1);
-		}   
-	}
-}
-elseif ($channelFunction=="CH1_RX"){
-	//set RX mode 
-	$data="W CD 21\r";
-	exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-	 //only channel1 select
-	$data="W 01 1E\r";
+  if(isset($channelFunction)){
+	if ($channelFunction=="CH1_TX"){
+		//set TX mode 
+		$data="W AB 21\r";
 		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-	for($i=0;$i<64;$i++){
-		//set attenuator value 
-		$val=$i;
-		$val=($val-31.5)*-2;
-		$val=ceil($val);
-        $data=dechex($val);
-        $data="W ".$data." 24\r";
-        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-        $temp='attenuator'.$i;
-		for($j=0;$j<64;$j++){
-			//send phase shifter value
-			$val=$j;
-			$data=dechex($val);
-			$data="W ".$data." 23\r";
-			exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-			$filename=$temp."_phaseShifter".$j;
-			//echo $filename;
-			$result="";
-			sendSocketCommand("INITiate1;*OPC?",$result) ;
-			sendSocketCommand("CALCulate1:DATA?FDATA",$result);
-			//store the result in a file 
-			$fp=fopen($dirName."/".$filename,'w');
-			fwrite($fp,$result);
-			fclose($fp);	
-			//get sweep time and sleep for that time .
-			sleep(1);
-		}   
+		 //only channel1 select
+		$data="W 01 1E\r";
+		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
+		for($i=0;$i<64;$i++){
+			//set attenuator value 
+			$val=$i;
+			$val=($val-31.5)*-2;
+			$val=ceil($val);
+	        $data=dechex($val);
+	        $data="W ".$data." 1B\r";
+	        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
+	        $temp='attenuator'.$i;
+			for($j=0;$j<64;$j++){
+				//send phase shifter value
+				$val=$j;
+				$data=dechex($val);
+				$data="W ".$data." 1A\r";
+				exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
+				$filename=$temp."_phaseShifter".$j;
+				//echo $filename;
+				$result="";
+				sendSocketCommand("INITiate1;*OPC?",$result) ;
+				sendSocketCommand("CALCulate1:DATA?FDATA",$result);
+				//store the result in a file 
+				$fp=fopen($dirName."/".$filename,'w');
+				fwrite($fp,$result);
+				fclose($fp);
+				outputProgress(($i+1)*($j+1),64*64,$i,$j);	
+				//get sweep time and sleep for that time .
+				sleep(1);
+			}   
+		}
 	}
-}
-elseif ($channelFunction=="CH2_TX"){
-	//set TX mode 
-	$data="W AB 21\r";
-	exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-	 //only channel1 select
-	$data="W 02 1E\r";
-	exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-	for($i=0;$i<64;$i++){
-		//set attenuator value 
-		$val=$i;
-		$val=($val-31.5)*-2;
-		$val=ceil($val);
-        $data=dechex($val);
-        $data="W ".$data." 1D\r";
-        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-        $temp='attenuator'.$i;
-		for($j=0;$j<64;$j++){
-			//send phase shifter value
-			$val=$j;
-			$data=dechex($val);
-			$data="W ".$data." 1C\r";
+	elseif ($channelFunction=="CH1_RX"){
+		//set RX mode 
+		$data="W CD 21\r";
+		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
+		 //only channel1 select
+		$data="W 01 1E\r";
 			exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-			$filename=$temp."_phaseShifter".$j;
-			//echo $filename;
-			$result="";
-			sendSocketCommand("INITiate1;*OPC?",$result) ;
-			sendSocketCommand("CALCulate1:DATA?FDATA",$result);
-			//store the result in a file 
-			$fp=fopen($dirName."/".$filename,'w');
-			fwrite($fp,$result);
-			fclose($fp);	
-			//get sweep time and sleep for that time .
-			sleep(1);
-		}   
+		for($i=0;$i<64;$i++){
+			//set attenuator value 
+			$val=$i;
+			$val=($val-31.5)*-2;
+			$val=ceil($val);
+	        $data=dechex($val);
+	        $data="W ".$data." 24\r";
+	        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
+	        $temp='attenuator'.$i;
+			for($j=0;$j<64;$j++){
+				//send phase shifter value
+				$val=$j;
+				$data=dechex($val);
+				$data="W ".$data." 23\r";
+				exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
+				$filename=$temp."_phaseShifter".$j;
+				//echo $filename;
+				$result="";
+				sendSocketCommand("INITiate1;*OPC?",$result) ;
+				sendSocketCommand("CALCulate1:DATA?FDATA",$result);
+				//store the result in a file 
+				$fp=fopen($dirName."/".$filename,'w');
+				fwrite($fp,$result);
+				fclose($fp);
+				outputProgress(($i+1)*($j+1),64*64,$i,$j);	
+				//get sweep time and sleep for that time .
+				sleep(1);
+			}   
+		}
 	}
-}
-elseif ($channelFunction=="CH2_RX"){
-	//set TX mode 
-	$data="W CD 21\r";
-	exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-	 //only channel2 select
-	$data="W 02 1E\r";
-	exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-	for($i=0;$i<64;$i++){
-		//set attenuator value 
-		$val=$i;
-		$val=($val-31.5)*-2;
-		$val=ceil($val);
-        $data=dechex($val);
-        $data="W ".$data." 26\r";
-        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-        $temp='attenuator'.$i;
-		for($j=0;$j<64;$j++){
-			//send phase shifter value
-			$val=$j;
-			$data=dechex($val);
-			$data="W ".$data." 25\r";
-			exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-			$filename=$temp."_phaseShifter".$j;
-			//echo $filename;
-			$result="";
-			sendSocketCommand("INITiate1;*OPC?",$result) ;
-			sendSocketCommand("CALCulate1:DATA?FDATA",$result);
-			//store the result in a file 
-			$fp=fopen($dirName."/".$filename,'w');
-			fwrite($fp,$result);
-			fclose($fp);	
-			//get sweep time and sleep for that time .
-			sleep(1);
-		}   
+	elseif ($channelFunction=="CH2_TX"){
+		//set TX mode 
+		$data="W AB 21\r";
+		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
+		 //only channel1 select
+		$data="W 02 1E\r";
+		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
+		for($i=0;$i<64;$i++){
+			//set attenuator value 
+			$val=$i;
+			$val=($val-31.5)*-2;
+			$val=ceil($val);
+	        $data=dechex($val);
+	        $data="W ".$data." 1D\r";
+	        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
+	        $temp='attenuator'.$i;
+			for($j=0;$j<64;$j++){
+				//send phase shifter value
+				$val=$j;
+				$data=dechex($val);
+				$data="W ".$data." 1C\r";
+				exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
+				$filename=$temp."_phaseShifter".$j;
+				//echo $filename;
+				$result="";
+				sendSocketCommand("INITiate1;*OPC?",$result) ;
+				sendSocketCommand("CALCulate1:DATA?FDATA",$result);
+				//store the result in a file 
+				$fp=fopen($dirName."/".$filename,'w');
+				fwrite($fp,$result);
+				fclose($fp);
+				outputProgress(($i+1)*($j+1),64*64,$i,$j);	
+				//get sweep time and sleep for that time .
+				sleep(1);
+			}   
+		}
 	}
-}
-$folderName=$_POST['folder'];
-$zipFileName='/var/www/automation/boards/'.$folderName.'.zip';
-$zipFile=new GoodZipArchive('/var/www/html/boards/'. $folderName,$zipFileName)or die("Could not create zip file");
-header('Content-Type: application/zip');
-header('Content-Disposition: attachment; filename ="'.basename($zipFileName).'"';
-header('Content-Length: ' . filesize($zipFileName));
-//header("Location:"."/boards/".basename($zipFileName)) or die("Could not open zip file");
-readfile($zipFileName);
-unlink($zipFileName);
-rmdir('var/www/automation/boards/'.$folderName);
+	elseif ($channelFunction=="CH2_RX"){
+		//set TX mode 
+		$data="W CD 21\r";
+		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
+		 //only channel2 select
+		$data="W 02 1E\r";
+		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
+		for($i=0;$i<64;$i++){
+			//set attenuator value 
+			$val=$i;
+			$val=($val-31.5)*-2;
+			$val=ceil($val);
+	        $data=dechex($val);
+	        $data="W ".$data." 26\r";
+	        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
+	        $temp='attenuator'.$i;
+			for($j=0;$j<64;$j++){
+				//send phase shifter value
+				$val=$j;
+				$data=dechex($val);
+				$data="W ".$data." 25\r";
+				exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
+				$filename=$temp."_phaseShifter".$j;
+				//echo $filename;
+				$result="";
+				sendSocketCommand("INITiate1;*OPC?",$result) ;
+				sendSocketCommand("CALCulate1:DATA?FDATA",$result);
+				//store the result in a file 
+				$fp=fopen($dirName."/".$filename,'w');
+				fwrite($fp,$result);
+				fclose($fp);
+				outputProgress(($i+1)*($j+1),64*64,$i,$j);	
+				//get sweep time and sleep for that time .
+				sleep(1);
+			}   
+		}
+	}
+	echo("<script>window.location='/automation/zip.php'</script>");
+ }
 }
 else{
 	die("incorrect response .Instrument not a PNA");

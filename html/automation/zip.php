@@ -35,7 +35,7 @@ class GoodZipArchive extends ZipArchive
 }
 
 session_start();
-$f=fopen("/var/www/automation/session.txt",'r');
+$f=fopen("/var/www/automation/session.txt",'r') or die("Could not open file.");
 $line=fgets($f);
 $line=str_replace(array("\n","\r"),'', $line);
 $folderName=$line;
