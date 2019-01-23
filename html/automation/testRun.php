@@ -1,4 +1,4 @@
-<?p00hp
+<?php
 ini_set('session.gc_maxlifetime', 7200);
 session_start();
 $host=$_SESSION['ipAddr'];
