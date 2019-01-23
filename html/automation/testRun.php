@@ -1,7 +1,10 @@
-<?php
+<?p00hp
+ini_set('session.gc_maxlifetime', 7200);
 session_start();
 $host=$_SESSION['ipAddr'];
 $_SESSION['folder']=$_POST['folder'];
+
+
 
 
 /**
@@ -10,8 +13,9 @@ $_SESSION['folder']=$_POST['folder'];
  * @param $current integer Current progress out of total
  * @param $total   integer Total steps required to complete
  */
-function outputProgress($current, $total) {
-    echo "<span style='position: absolute;z-index:$current;background:#FFF;'>" . round($current / $total * 100) . "% </span>";
+//
+function outputProgress($current, $total,$attenuator,$phaseShifter) {
+    echo "<span style='position: absolute;z-index:$current;background:#FFF;'>" ."Attenuator:".$attenuator." PhaseShifter:".$phaseShifter." Progress:".round($current / $total * 100) . "% </span>";
     myFlush();
     //sleep(1);
 }
@@ -58,7 +62,11 @@ function sendSocketCommand($cmdString,&$result){
 $channelFunction=$_POST['channel'];
 //create a folder 
 $directory=$_POST['folder'];
-$dirName="/var/www/automation/boards/".$directory;
+//write the name 
+$f=fopen("/var/www/automation/session.txt",'w') or die("Could not open text file ");
+fwrite($f,$directory);
+fclose($f);
+$dirName="/var/www/html/boards/".$directory;
 if(!is_dir($dirName)){
 		mkdir($dirName,0777,true);
 }
@@ -109,8 +117,8 @@ if ($channelFunction=="CH1_TX"){
 			//store the result in a file 
 			$fp=fopen($dirName."/".$filename,'w');
 			fwrite($fp,$result);
-			fclose($fp);	
-			outputProgress($i*$j,4095);
+			fclose($fp);
+			outputProgress(($i+1)*($j+1),1*1,$i,$j);
 			//get sweep time and sleep for that time .
 			sleep(1);
 		}   
@@ -146,7 +154,8 @@ elseif ($channelFunction=="CH1_RX"){
 			//store the result in a file 
 			$fp=fopen($dirName."/".$filename,'w');
 			fwrite($fp,$result);
-			fclose($fp);	
+			fclose($fp);
+			outputProgress(($i+1)*($j+1),1*1,$i,$j);	
 			//get sweep time and sleep for that time .
 			sleep(1);
 		}   
@@ -182,7 +191,8 @@ elseif ($channelFunction=="CH2_TX"){
 			//store the result in a file 
 			$fp=fopen($dirName."/".$filename,'w');
 			fwrite($fp,$result);
-			fclose($fp);	
+			fclose($fp);
+			outputProgress(($i+1)*($j+1),1*1,$i,$j);	
 			//get sweep time and sleep for that time .
 			sleep(1);
 		}   
@@ -218,7 +228,8 @@ elseif ($channelFunction=="CH2_RX"){
 			//store the result in a file 
 			$fp=fopen($dirName."/".$filename,'w');
 			fwrite($fp,$result);
-			fclose($fp);	
+			fclose($fp);
+			outputProgress(($i+1)*($j+1),1*1,$i,$j);	
 			//get sweep time and sleep for that time .
 			sleep(1);
 		}   

@@ -35,14 +35,17 @@ class GoodZipArchive extends ZipArchive
 }
 
 session_start();
-$folderName=$_SESSION['folder'];
+$f=fopen("/var/www/automation/session.txt",'r');
+$line=fgets($f);
+$line=str_replace(array("\n","\r"),'', $line);
+$folderName=$line;
 $zipFileName='/var/www/automation/boards/'.$folderName.'.zip';
-$zipFile=new GoodZipArchive('/var/www/html/boards/'. $folderName,$zipFileName)or die("Could not create zip file");
+$zipFile=new GoodZipArchive('/var/www/automation/boards/'. $folderName,$zipFileName)or die("Could not create zip file");
 header('Content-Type: application/zip');
 header('Content-Disposition: attachment; filename = "'.basename($zipFileName).'"');
 header('Content-Length: ' . filesize($zipFileName));
 //header("Location:"."/boards/".basename($zipFileName)) or die("Could not open zip file");
 readfile($zipFileName);
 unlink($zipFileName);
-rmdir('var/www/automation/boards/'.$folderName);
+exec('rm -r /var/www/automation/boards/'.$folderName);
 ?>
