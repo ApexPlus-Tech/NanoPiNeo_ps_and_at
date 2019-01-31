@@ -9,7 +9,7 @@
 	//However, it can change .
 	
 	
-	$host="192.168.0.120";
+	$host=$_POST['IP'];
 
 	$command=$_POST['command'];   //This command  variable has got value from $_POST variable which has been passed from gui page by user
 
