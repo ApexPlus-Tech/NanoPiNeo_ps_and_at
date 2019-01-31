@@ -89,7 +89,7 @@ $result=strtolower($result);
 $scpiServerCheckFlag=strpos($result,"pna");
 
 //Note use === instead of ==
-if($scpiServerCheckFlag===true  ){
+if(1 || $scpiServerCheckFlag===true  ){
   if(isset($channelFunction)){
 	if ($channelFunction=="CH1_TX"){
 		//set TX mode 
@@ -117,7 +117,8 @@ if($scpiServerCheckFlag===true  ){
 				//echo $filename;
 				$result="";
 				sendSocketCommand("INITiate1;*OPC?",$result) ;
-				sendSocketCommand("CALCulate1:DATA?FDATA",$result);
+				sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1'");
+				sendSocketCommand("CALCulate1:DATA? SDATA",$result);
 				//store the result in a file 
 				$fp=fopen($dirName."/".$filename,'w');
 				fwrite($fp,$result);
@@ -153,8 +154,10 @@ if($scpiServerCheckFlag===true  ){
 				$filename=$temp."_phaseShifter".$j;
 				//echo $filename;
 				$result="";
-				sendSocketCommand("INITiate1;*OPC?",$result) ;
-				sendSocketCommand("CALCulate1:DATA?FDATA",$result);
+				 sendSocketCommand("INITiate1;*OPC?",$result) ;
+                                sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1'");
+                                sendSocketCommand("CALCulate1:DATA? SDATA",$result);
+
 				//store the result in a file 
 				$fp=fopen($dirName."/".$filename,'w');
 				fwrite($fp,$result);
@@ -190,8 +193,9 @@ if($scpiServerCheckFlag===true  ){
 				$filename=$temp."_phaseShifter".$j;
 				//echo $filename;
 				$result="";
-				sendSocketCommand("INITiate1;*OPC?",$result) ;
-				sendSocketCommand("CALCulate1:DATA?FDATA",$result);
+				 sendSocketCommand("INITiate1;*OPC?",$result) ;
+                                sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1'");
+                                sendSocketCommand("CALCulate1:DATA? SDATA",$result);
 				//store the result in a file 
 				$fp=fopen($dirName."/".$filename,'w');
 				fwrite($fp,$result);
@@ -227,8 +231,10 @@ if($scpiServerCheckFlag===true  ){
 				$filename=$temp."_phaseShifter".$j;
 				//echo $filename;
 				$result="";
-				sendSocketCommand("INITiate1;*OPC?",$result) ;
-				sendSocketCommand("CALCulate1:DATA?FDATA",$result);
+				 sendSocketCommand("INITiate1;*OPC?",$result) ;
+                                sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1'");
+                                sendSocketCommand("CALCulate1:DATA? SDATA",$result);
+
 				//store the result in a file 
 				$fp=fopen($dirName."/".$filename,'w');
 				fwrite($fp,$result);

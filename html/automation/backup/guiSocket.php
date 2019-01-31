@@ -62,9 +62,9 @@
 		<div id="fill-commands">
 			<h3> Give commands</h3>
 			<form method="post" action="socket.php">
+				<p>IP:<input type="text" name='IP' placeholder="192.168.0.xxx"></p>
 				<p>Commands:<input type="text" name='command' placeholder="eg.*IST?"></p>
 				<p><button>send</button></p>
-				<p><button>Download zip file</button></p>
 			</form>
 
 
