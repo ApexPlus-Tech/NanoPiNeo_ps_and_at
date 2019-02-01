@@ -94,7 +94,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		 //only channel1 select
 		$data="W 01 1E\r";
 		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-		for($i=0;$i<ATTEN_MAX;$i++){
+		for($i=0;$i<$ATTEN_MAX;$i++){
 			//set attenuator value 
 			$val=$i;
 			$val=($val-31.5)*-2;
@@ -103,7 +103,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 	        $data="W ".$data." 1B\r";
 	        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
 	        $temp='attenuator'.$i;
-			for($j=0;$j<PHASE_MAX;$j++){
+			for($j=0;$j<$PHASE_MAX;$j++){
 				//send phase shifter value
 				$val=$j;
 				$data=dechex($val);
@@ -119,7 +119,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				$fp=fopen($dirName."/".$filename,'w');
 				fwrite($fp,$result);
 				fclose($fp);
-				outputProgress(($i+1)*($j+1),ATTEN_MAX*PHASE_MAX,$i,$j);	
+				outputProgress(($i+1)*($j+1),$ATTEN_MAX*$PHASE_MAX,$i,$j);	
 				//get sweep time and sleep for that time .
 				sleep(1);
 			}   
@@ -132,7 +132,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		 //only channel1 select
 		$data="W 01 1E\r";
 			exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-		for($i=0;$i<ATTEN_MAX;$i++){
+		for($i=0;$i<$ATTEN_MAX;$i++){
 			//set attenuator value 
 			$val=$i;
 			$val=($val-31.5)*-2;
@@ -141,7 +141,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 	        $data="W ".$data." 24\r";
 	        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
 	        $temp='attenuator'.$i;
-			for($j=0;$j<PHASE_MAX;$j++){
+			for($j=0;$j<$PHASE_MAX;$j++){
 				//send phase shifter value
 				$val=$j;
 				$data=dechex($val);
@@ -157,7 +157,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				$fp=fopen($dirName."/".$filename,'w');
 				fwrite($fp,$result);
 				fclose($fp);
-				outputProgress(($i+1)*($j+1),ATTEN_MAX*PHASE_MAX,$i,$j);	
+				outputProgress(($i+1)*($j+1),$ATTEN_MAX*$PHASE_MAX,$i,$j);	
 				//get sweep time and sleep for that time .
 				sleep(1);
 			}   
@@ -170,7 +170,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		 //only channel1 select
 		$data="W 02 1E\r";
 		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-		for($i=0;$i<ATTEN_MAX;$i++){
+		for($i=0;$i<$ATTEN_MAX;$i++){
 			//set attenuator value 
 			$val=$i;
 			$val=($val-31.5)*-2;
@@ -179,7 +179,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 	        $data="W ".$data." 1D\r";
 	        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
 	        $temp='attenuator'.$i;
-			for($j=0;$j<PHASE_MAX;$j++){
+			for($j=0;$j<$PHASE_MAX;$j++){
 				//send phase shifter value
 				$val=$j;
 				$data=dechex($val);
@@ -195,7 +195,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				$fp=fopen($dirName."/".$filename,'w');
 				fwrite($fp,$result);
 				fclose($fp);
-				outputProgress(($i+1)*($j+1),ATTEN_MAX*PHASE_MAX,$i,$j);	
+				outputProgress(($i+1)*($j+1),$ATTEN_MAX*$PHASE_MAX,$i,$j);	
 				//get sweep time and sleep for that time .
 				sleep(1);
 			}   
@@ -208,7 +208,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		 //only channel2 select
 		$data="W 02 1E\r";
 		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-		for($i=0;$i<ATTEN_MAX;$i++){
+		for($i=0;$i<$ATTEN_MAX;$i++){
 			//set attenuator value 
 			$val=$i;
 			$val=($val-31.5)*-2;
@@ -217,7 +217,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 	        $data="W ".$data." 26\r";
 	        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
 	        $temp='attenuator'.$i;
-			for($j=0;$j<PHASE_MAX;$j++){
+			for($j=0;$j<$PHASE_MAX;$j++){
 				//send phase shifter value
 				$val=$j;
 				$data=dechex($val);
@@ -234,7 +234,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				$fp=fopen($dirName."/".$filename,'w');
 				fwrite($fp,$result);
 				fclose($fp);
-				outputProgress(($i+1)*($j+1),ATTEN_MAX*PHASE_MAX,$i,$j);	
+				outputProgress(($i+1)*($j+1),$ATTEN_MAX*$PHASE_MAX,$i,$j);	
 				//get sweep time and sleep for that time .
 				sleep(1);
 			}   
