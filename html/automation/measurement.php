@@ -121,7 +121,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				fclose($fp);
 				outputProgress(($i+1)*($j+1),$ATTEN_MAX*$PHASE_MAX,$i,$j);	
 				//get sweep time and sleep for that time .
-				sleep(1);
+				//sleep(1);
 			}   
 		}
 	}
@@ -159,7 +159,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				fclose($fp);
 				outputProgress(($i+1)*($j+1),$ATTEN_MAX*$PHASE_MAX,$i,$j);	
 				//get sweep time and sleep for that time .
-				sleep(1);
+				//sleep(1);
 			}   
 		}
 	}
@@ -197,7 +197,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				fclose($fp);
 				outputProgress(($i+1)*($j+1),$ATTEN_MAX*$PHASE_MAX,$i,$j);	
 				//get sweep time and sleep for that time .
-				sleep(1);
+				//sleep(1);
 			}   
 		}
 	}
@@ -236,7 +236,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				fclose($fp);
 				outputProgress(($i+1)*($j+1),$ATTEN_MAX*$PHASE_MAX,$i,$j);	
 				//get sweep time and sleep for that time .
-				sleep(1);
+				//sleep(1);
 			}   
 		}
 	}
