@@ -24,7 +24,7 @@ $port=5025;   //here the port no is 5025.it is not random
 	//SOCK_STREAM is for TCP and SOCK_DGRAM is for UDP
 	//
 $socket = socket_create(AF_INET, SOCK_STREAM, 0) or die("Could not create socket\n");  //it creates a tcp socket
-socket_set_option($socket,SOL_SOCKET, SO_RCVTIMEO, array("sec"=>5, "usec"=>0));  //    if it doesn,t get reply from server it will close its connection after 5 sec
+socket_set_option($socket,SOL_SOCKET, SO_RCVTIMEO, array("sec"=>1, "usec"=>0));  //    if it doesn,t get reply from server it will close its connection after 5 sec
 $result = socket_connect($socket, $host, $port) or die("Could not connect to server\n");   //it has connected to server and stores its connection link in result
 //set up the parameters 
 $startFreq=$_POST['startFreq'];
