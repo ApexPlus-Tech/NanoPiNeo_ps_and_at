@@ -10,7 +10,7 @@ function sendSocketCommand($cmdString){
 	socket_write($socket, $command, strlen($command)) or die("Could not send data to server\n");
 	//$result="";
 	//socket_recv($socket, $result,1024,MSG_WAITALL);// or header('Location:guiSocket.php');
-	socket_read($socket,1024);
+	//socket_read($socket,1024);
 	//echo $result;
 
 	//return $result;
