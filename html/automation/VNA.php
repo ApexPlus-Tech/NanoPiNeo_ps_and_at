@@ -4,29 +4,28 @@ $host=$_POST['ipAddr'];
 $_SESSION['ipAddr']=$_POST['ipAddr'];
 //function definition
 function sendSocketCommand($cmdString){
-	$host=$GLOBALS['host'];
-	$command=$cmdString;   //This command  variable has got value from $_POST variable which has been passed from gui page by user
-	//echo "$host<br/>";
-	//$command="*IDN?";	
-    $command="$command"."\n";      //concatenating the command with newline character
+	$socket=$GLOBALS['socket'];
+	$command="$cmdString"."\n"; 
+	//it has sent the command to SCPI server 
+	socket_write($socket, $command, strlen($command)) or die("Could not send data to server\n");
+	//$result="";
+	//socket_recv($socket, $result,1024,MSG_WAITALL);// or header('Location:guiSocket.php');
+	socket_read($socket,1024);
+	//echo $result;
 
-	$port=5025;   //here the port no is 5025.it is not random
+	//return $result;
+}
+
+$host=$GLOBALS['host'];
+	
+$port=5025;   //here the port no is 5025.it is not random
 	//SCPI is a protocol built over top of TCP which listens on specific port ,which is 5025 or 5024 by default
 	//So ,I have created a tcp socket for iv4
 	//SOCK_STREAM is for TCP and SOCK_DGRAM is for UDP
 	//
-	$socket = socket_create(AF_INET, SOCK_STREAM, 0) or die("Could not create socket\n");  //it creates a tcp socket
-	socket_set_option($socket,SOL_SOCKET, SO_RCVTIMEO, array("sec"=>5, "usec"=>0));  //    if it doesn,t get reply from server it will close its connection after 5 sec
-	$result = socket_connect($socket, $host, $port) or die("Could not connect to server\n");   //it has connected to server and stores its connection link in result
-
-	//it has sent the command to SCPI server 
-	socket_write($socket, $command, strlen($command)) or die("Could not send data to server\n");
-	//$result="";
-	socket_recv($socket, $result,1024,MSG_WAITALL);// or header('Location:guiSocket.php');
-	//echo $result;
-	socket_close($socket);
-	return $result;
-}
+$socket = socket_create(AF_INET, SOCK_STREAM, 0) or die("Could not create socket\n");  //it creates a tcp socket
+socket_set_option($socket,SOL_SOCKET, SO_RCVTIMEO, array("sec"=>5, "usec"=>0));  //    if it doesn,t get reply from server it will close its connection after 5 sec
+$result = socket_connect($socket, $host, $port) or die("Could not connect to server\n");   //it has connected to server and stores its connection link in result
 //set up the parameters 
 $startFreq=$_POST['startFreq'];
 $stopFreq=$_POST['stopFreq'];
@@ -65,5 +64,6 @@ sendSocketCommand("CALC1:FORM MLOG");//set the Y axis to dB .
 //$sweepTime=sendSocketCommand("SENSe1:SWEep:TIME?");
 //sleep(1);
 //$_SESSION['sweepTime']=$sweepTime;
+socket_close($socket);
 echo "Configuration done."
 ?>
