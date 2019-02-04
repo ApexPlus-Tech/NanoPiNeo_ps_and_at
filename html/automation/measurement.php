@@ -30,31 +30,26 @@ function myFlush() {
 }
 
 function sendSocketCommand($cmdString,&$result){
-	$host=$GLOBALS['host'];
+	$socket=$GLOBALS['socket'];
 	$command=$cmdString;   //This command  variable has got value from $_POST variable which has been passed from gui page by user
-	$directory=$_POST['folder'];
 	//$command="*IDN?";	
     $command="$command"."\n";      //concatenating the command with newline character
+	//it has sent the command to SCPI server 
+	socket_write($socket, $command, strlen($command)) or die("Could not send data to server\n");
+	//$result="";
+	socket_recv($socket, $result,12438,MSG_WAITALL);		
+}
 
-	$port=5025;   //here the port no is 5025.it is not random
+
+$port=5025;   //here the port no is 5025.it is not random
 	//SCPI is a protocol built over top of TCP which listens on specific port ,which is 5025 or 5024 by default
 	//So ,I have created a tcp socket for iv4
 	//SOCK_STREAM is for TCP and SOCK_DGRAM is for UDP
 	//
-	//Edit these lines  
-	$socket = socket_create(AF_INET, SOCK_STREAM, 0) or die("Could not create socket\n");  //it creates a tcp socket
-
-
-	socket_set_option($socket,SOL_SOCKET, SO_RCVTIMEO, array("sec"=>5, "usec"=>0));  //    if it doesn,t get reply from server it will close its connection after 5 sec
-	$result = socket_connect($socket, $host, $port) or die("Could not connect to server\n");   //it has connected to server and stores its connection link in result
-
-	//it has sent the command to SCPI server 
-	socket_write($socket, $command, strlen($command)) or die("Could not send data to server\n");
-	//$result="";
-	socket_recv($socket, $result,12438,MSG_WAITALL);
-	socket_close($socket);		
-}
-
+//Edit these lines  
+$socket = socket_create(AF_INET, SOCK_STREAM, 0) or die("Could not create socket\n");  //it creates a tcp socket
+socket_set_option($socket,SOL_SOCKET, SO_RCVTIMEO, array("sec"=>1, "usec"=>0));  //    if it doesn,t get reply from server it will close its connection after 5 sec
+$result = socket_connect($socket, $host, $port) or die("Could not connect to server\n");   //it has connected to server and stores its connection link in result
 //get the value of channel radio button 
 //echo $host;
 $channelFunction=$_POST['channel'];
@@ -240,6 +235,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 			}   
 		}
 	}
+	socket_close($socket);
 	echo("<script>window.location='/automation/zip.php'</script>");
  }
 }
