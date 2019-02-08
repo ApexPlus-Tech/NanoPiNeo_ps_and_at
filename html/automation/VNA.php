@@ -2,6 +2,9 @@
 session_start();
 $host=$_POST['ipAddr'];
 $_SESSION['ipAddr']=$_POST['ipAddr'];
+$_SESSION['startFreq']=$_POST['startFreq'];
+$_SESSION['stopFreq']=$_POST['stopFreq'];
+$_SESSION['points']=$_POST['points'];
 //function definition
 function sendSocketCommand($cmdString){
 	$socket=$GLOBALS['socket'];
@@ -10,7 +13,7 @@ function sendSocketCommand($cmdString){
 	socket_write($socket, $command, strlen($command)) or die("Could not send data to server\n");
 	//$result="";
 	//socket_recv($socket, $result,1024,MSG_WAITALL);// or header('Location:guiSocket.php');
-	//socket_read($socket,1024);
+	socket_read($socket,1);
 	//echo $result;
 
 	//return $result;
@@ -33,18 +36,16 @@ $pulseWidth=$_POST['pulseWidth'];
 $dutyCycle=$_POST['dutyCycle'];
 $points=$_POST['points'];
 
-//start frequency 
+//COMMANDS FOR WINDOW1
 sendSocketCommand("SYSTem:FPRESET");
 //sleep(1);
-sendSocketCommand("CALCulate1:PARameter:DEFine 'Meas1',S21");
+sendSocketCommand("CALCulate1:PARameter:DEFine 'Meas1_Amp',S21");
 //sleep(1);
 sendSocketCommand("DISPlay:WINDow1:STATe ON");
 //sleep(1);
-sendSocketCommand("DISPlay:WINDow1:TRACe1:FEED 'Meas1'");
+sendSocketCommand("DISPlay:WINDow1:TRACe1:FEED 'Meas1_Amp'");
 //sleep(1);
 sendSocketCommand("INITiate1:CONTinuous OFF;*OPC?");
-
-//sendSocketCommand("INITiate1:CONTinous OFF;*OPC?");
 //sleep(1);
 sendSocketCommand("SENSe1:SWEep:TRIGger:POINt OFF");
 //sleep(1);
@@ -56,14 +57,72 @@ sendSocketCommand("SENSe1:FREQuency:STOP ".$stopFreq);
 //sleep(1);
 sendSocketCommand("INITiate1;*OPC?");
 //sleep(1);
-sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1'");
+sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Amp'");
 //sleep(1);
 sendSocketCommand("FORMat ASCII");
 sendSocketCommand("CALC1:FORM MLOG");//set the Y axis to dB .
-//sleep(1);
-//$sweepTime=sendSocketCommand("SENSe1:SWEep:TIME?");
-//sleep(1);
-//$_SESSION['sweepTime']=$sweepTime;
+sendSocketCommand("CALC1:MARK1:STAT ON");
+sendSocketCommand("CALC1:MARK1:TYPE FIXED");
+sendSocketCommand("CALC1:MARK1:X 3.1e9");
+
+sendSocketCommand("CALC1:MARK2:STAT ON");
+sendSocketCommand("CALC1:MARK2:TYPE FIXED");
+sendSocketCommand("CALC1:MARK2:X 3.2e9");
+
+
+sendSocketCommand("CALC1:MARK3:STAT ON");
+sendSocketCommand("CALC1:MARK3:TYPE FIXED");
+sendSocketCommand("CALC1:MARK3:X 3.3e9");
+
+
+sendSocketCommand("CALC1:MARK4:STAT ON");
+sendSocketCommand("CALC1:MARK4:TYPE FIXED");
+sendSocketCommand("CALC1:MARK4:X 3.4e9");
+
+
+sendSocketCommand("CALC1:MARK5:STAT ON");
+sendSocketCommand("CALC1:MARK5:TYPE FIXED");
+sendSocketCommand("CALC1:MARK5:X 3.5e9");
+//COMMANDS FOR WINDOW2
+sendSocketCommand("CALCulate2:PARameter:DEFine 'Meas1_Phase',S21");
+sendSocketCommand("DISPlay:WINDow2:STATe ON");
+sendSocketCommand("DISPLay:WINDow2:TRACe2:FEED 'Meas1_Phase'");
+sendSocketCommand("INITiate2:CONTinuous OFF;*OPC?");
+sendSocketCommand("SENSe2:SWEep:TRIGger:POINt OFF");
+
+sendSocketCommand("SENSe2:SWEep:POINts ".$points);
+sendSocketCommand("SENSe2:FREQuency:STARt " .$startFreq);
+sendSocketCommand("SENSe2:FREQuency:STOP ".$stopFreq);
+sendSocketCommand("INITiate2;*OPC?");
+sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Phase'");
+sendSocketCommand("CALC2:FORM PHASe");
+//set the markers
+
+sendSocketCommand("CALC2:MARK1:STAT ON");
+sendSocketCommand("CALC2:MARK1:TYPE FIXED");
+sendSocketCommand("CALC2:MARK1:X 3.1e9");
+
+
+sendSocketCommand("CALC2:MARK2:STAT ON");
+sendSocketCommand("CALC2:MARK2:TYPE FIXED");
+sendSocketCommand("CALC2:MARK2:X 3.2e9");
+
+
+sendSocketCommand("CALC2:MARK3:STAT ON");
+sendSocketCommand("CALC2:MARK3:TYPE FIXED");
+sendSocketCommand("CALC2:MARK3:X 3.3e9");
+
+sendSocketCommand("CALC2:MARK4:STAT ON");
+sendSocketCommand("CALC2:MARK4:TYPE FIXED");
+sendSocketCommand("CALC2:MARK4:X 3.4e9");
+
+
+sendSocketCommand("CALC2:MARK5:STAT ON");
+sendSocketCommand("CALC2:MARK5:TYPE FIXED");
+sendSocketCommand("CALC2:MARK5:X 3.5e9");
+
+
+sendSocketCommand("DISP:ENAB ON");
 socket_close($socket);
 echo "Configuration done."
 ?>
