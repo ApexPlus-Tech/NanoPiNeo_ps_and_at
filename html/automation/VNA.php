@@ -98,28 +98,28 @@ sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Phase'");
 sendSocketCommand("CALC2:FORM PHASe");
 //set the markers
 
-sendSocketCommand("CALC2:MARK1:STAT ON");
-sendSocketCommand("CALC2:MARK1:TYPE FIXED");
-sendSocketCommand("CALC2:MARK1:X 3.1e9");
+sendSocketCommand("CALC2:MARK6:STAT ON");
+sendSocketCommand("CALC2:MARK6:TYPE FIXED");
+sendSocketCommand("CALC2:MARK6:X 3.1e9");
 
 
-sendSocketCommand("CALC2:MARK2:STAT ON");
-sendSocketCommand("CALC2:MARK2:TYPE FIXED");
-sendSocketCommand("CALC2:MARK2:X 3.2e9");
+sendSocketCommand("CALC2:MARK7:STAT ON");
+sendSocketCommand("CALC2:MARK7:TYPE FIXED");
+sendSocketCommand("CALC2:MARK7:X 3.2e9");
 
 
-sendSocketCommand("CALC2:MARK3:STAT ON");
-sendSocketCommand("CALC2:MARK3:TYPE FIXED");
-sendSocketCommand("CALC2:MARK3:X 3.3e9");
+sendSocketCommand("CALC2:MARK8:STAT ON");
+sendSocketCommand("CALC2:MARK8:TYPE FIXED");
+sendSocketCommand("CALC2:MARK8:X 3.3e9");
 
-sendSocketCommand("CALC2:MARK4:STAT ON");
-sendSocketCommand("CALC2:MARK4:TYPE FIXED");
-sendSocketCommand("CALC2:MARK4:X 3.4e9");
+sendSocketCommand("CALC2:MARK9:STAT ON");
+sendSocketCommand("CALC2:MARK9:TYPE FIXED");
+sendSocketCommand("CALC2:MARK9:X 3.4e9");
 
 
-sendSocketCommand("CALC2:MARK5:STAT ON");
-sendSocketCommand("CALC2:MARK5:TYPE FIXED");
-sendSocketCommand("CALC2:MARK5:X 3.5e9");
+sendSocketCommand("CALC2:MARK10:STAT ON");
+sendSocketCommand("CALC2:MARK10:TYPE FIXED");
+sendSocketCommand("CALC2:MARK10:X 3.5e9");
 
 
 sendSocketCommand("DISP:ENAB ON");
