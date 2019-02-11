@@ -101,7 +101,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		$data="W 01 1E\r";
 		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
 		//set output format to phase
-		sendSocketCommand("CALC1:FORM PHASe");
+		sendSocketCommand("CALC2:FORM PHASe");
 		for($i=0;$i<1;$i++){
 			$filename="Attenuator".$i."_PhaseShifter_xx.txt";
 			$fp=fopen($dirName."/".$filename,'a');
@@ -129,9 +129,9 @@ if(1 || $scpiServerCheckFlag===true  ){
 				//$filename=$temp."_phaseShifter".$j;
 				//echo $filename;
 				$result="";
-				sendSocketCommand("INITiate1;*OPC?",$result) ;
-				sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
-				sendSocketCommand("CALCulate1:DATA? FDATA",$result);
+				sendSocketCommand("INITiate2;*OPC?",$result) ;
+				sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Phase'");
+				sendSocketCommand("CALCulate2:DATA? FDATA",$result);
 				//store the result in a file 
 				$result=str_replace(",", "\t", $result);
 				fwrite($fp,($j)."\t".$result."\n");
@@ -141,7 +141,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 			}//phase shifter loop ends here   
 		}//attenuator loop ends here
 		fclose($fp);
-		sendSocketCommand("CALC2:FORM MLOG");
+		sendSocketCommand("CALC1:FORM MLOG");
 		for($i=0;$i<1;$i++){
 			$filename="PhaseShifter".$i."_Attenuator_xx.txt";
 			$fp=fopen($dirName."/".$filename,'a');
@@ -161,9 +161,9 @@ if(1 || $scpiServerCheckFlag===true  ){
 	        $data="W ".$data." 1B\r";
 	        
 	        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-			sendSocketCommand("INITiate2;*OPC?",$result) ;
-			sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Amp'");
-			sendSocketCommand("CALCulate2:DATA? FDATA",$result);
+			sendSocketCommand("INITiate1;*OPC?",$result) ;
+			sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Amp'");
+			sendSocketCommand("CALCulate1:DATA? FDATA",$result);
 			//store the result in a file 
 			$result=str_replace(",", "\t", $result);
 			fwrite($fp,($j)."\t".$result."\n");
@@ -178,7 +178,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		 //only channel1 select
 		$data="W 01 1E\r";
 		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-		sendSocketCommand("CALC1:FORM PHASe");
+		sendSocketCommand("CALC2:FORM PHASe");
 		for($i=0;$i<1;$i++){
 			$filename="Attenuator".$i."_PhaseShifter_xx.txt";
 			$fp=fopen($dirName."/".$filename,'a');
@@ -206,9 +206,9 @@ if(1 || $scpiServerCheckFlag===true  ){
 				//$filename=$temp."_phaseShifter".$j;
 				//echo $filename;
 				$result="";
-				sendSocketCommand("INITiate1;*OPC?",$result) ;
-				sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
-				sendSocketCommand("CALCulate1:DATA? FDATA",$result);
+				sendSocketCommand("INITiate2;*OPC?",$result) ;
+				sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Phase'");
+				sendSocketCommand("CALCulate2:DATA? FDATA",$result);
 				//store the result in a file 
 				$result=str_replace(",", "\t", $result);
 				fwrite($fp,($j)."\t".$result."\n");
@@ -218,7 +218,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 			}//phase shifter loop ends here   
 		}//attenuator loop ends here
 		fclose($fp);
-		sendSocketCommand("CALC2:FORM MLOG");
+		sendSocketCommand("CALC1:FORM MLOG");
 		for($i=0;$i<1;$i++){
 			$filename="PhaseShifter".$i."_Attenuator_xx.txt";
 			$fp=fopen($dirName."/".$filename,'a');
@@ -238,9 +238,9 @@ if(1 || $scpiServerCheckFlag===true  ){
 	        $data="W ".$data." 24\r";
 	        
 	        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-			sendSocketCommand("INITiate2;*OPC?",$result) ;
-			sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Amp'");
-			sendSocketCommand("CALCulate2:DATA? FDATA",$result);
+			sendSocketCommand("INITiate1;*OPC?",$result) ;
+			sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Amp'");
+			sendSocketCommand("CALCulate1:DATA? FDATA",$result);
 			//store the result in a file 
 			$result=str_replace(",", "\t", $result);
 			fwrite($fp,($j)."\t".$result."\n");
@@ -255,7 +255,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		 //only channel1 select
 		$data="W 02 1E\r";
 		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-		sendSocketCommand("CALC1:FORM PHASe");
+		sendSocketCommand("CALC2:FORM PHASe");
 		for($i=0;$i<1;$i++){
 			$filename="Attenuator".$i."_PhaseShifter_xx.txt";
 			$fp=fopen($dirName."/".$filename,'a');
@@ -283,9 +283,9 @@ if(1 || $scpiServerCheckFlag===true  ){
 				//$filename=$temp."_phaseShifter".$j;
 				//echo $filename;
 				$result="";
-				sendSocketCommand("INITiate1;*OPC?",$result) ;
-				sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
-				sendSocketCommand("CALCulate1:DATA? FDATA",$result);
+				sendSocketCommand("INITiate2;*OPC?",$result) ;
+				sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Phase'");
+				sendSocketCommand("CALCulate2:DATA? FDATA",$result);
 				//store the result in a file 
 				$result=str_replace(",", "\t", $result);
 				fwrite($fp,($j)."\t".$result."\n");
@@ -295,7 +295,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 			}//phase shifter loop ends here   
 		}//attenuator loop ends here
 		fclose($fp);
-		sendSocketCommand("CALC2:FORM MLOG");
+		sendSocketCommand("CALC1:FORM MLOG");
 		for($i=0;$i<1;$i++){
 			$filename="PhaseShifter".$i."_Attenuator_xx.txt";
 			$fp=fopen($dirName."/".$filename,'a');
@@ -315,9 +315,9 @@ if(1 || $scpiServerCheckFlag===true  ){
 	        $data="W ".$data." 1D\r";
 	        
 	        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-			sendSocketCommand("INITiate2;*OPC?",$result) ;
-			sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Amp'");
-			sendSocketCommand("CALCulate2:DATA? FDATA",$result);
+			sendSocketCommand("INITiate1;*OPC?",$result) ;
+			sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Amp'");
+			sendSocketCommand("CALCulate1:DATA? FDATA",$result);
 			//store the result in a file 
 			$result=str_replace(",", "\t", $result);
 			fwrite($fp,($j)."\t".$result."\n");
@@ -332,7 +332,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		 //only channel2 select
 		$data="W 02 1E\r";
 		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-		sendSocketCommand("CALC1:FORM PHASe");
+		sendSocketCommand("CALC2:FORM PHASe");
 		for($i=0;$i<1;$i++){
 			$filename="Attenuator".$i."_PhaseShifter_xx.txt";
 			$fp=fopen($dirName."/".$filename,'a');
@@ -360,9 +360,9 @@ if(1 || $scpiServerCheckFlag===true  ){
 				//$filename=$temp."_phaseShifter".$j;
 				//echo $filename;
 				$result="";
-				sendSocketCommand("INITiate1;*OPC?",$result) ;
-				sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
-				sendSocketCommand("CALCulate1:DATA? FDATA",$result);
+				sendSocketCommand("INITiate2;*OPC?",$result) ;
+				sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Phase'");
+				sendSocketCommand("CALCulate2:DATA? FDATA",$result);
 				//store the result in a file 
 				$result=str_replace(",", "\t", $result);
 				fwrite($fp,($j)."\t".$result."\n");
@@ -372,7 +372,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 			}//phase shifter loop ends here   
 		}//attenuator loop ends here
 		fclose($fp);
-		sendSocketCommand("CALC2:FORM MLOG");
+		sendSocketCommand("CALC1:FORM MLOG");
 		for($i=0;$i<1;$i++){
 			$filename="PhaseShifter".$i."_Attenuator_xx.txt";
 			$fp=fopen($dirName."/".$filename,'a');
@@ -392,9 +392,9 @@ if(1 || $scpiServerCheckFlag===true  ){
 	        $data="W ".$data." 26\r";
 	        
 	        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-			sendSocketCommand("INITiate2;*OPC?",$result) ;
-			sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Amp'");
-			sendSocketCommand("CALCulate2:DATA? FDATA",$result);
+			sendSocketCommand("INITiate1;*OPC?",$result) ;
+			sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Amp'");
+			sendSocketCommand("CALCulate1:DATA? FDATA",$result);
 			//store the result in a file 
 			$result=str_replace(",", "\t", $result);
 			fwrite($fp,($j)."\t".$result."\n");
