@@ -101,6 +101,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		$data="W 01 1E\r";
 		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
 		//set output format to phase
+		sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Phase'");
 		sendSocketCommand("CALC2:FORM PHASe");
 		for($i=0;$i<1;$i++){
 			$filename="Attenuator".$i."_PhaseShifter_xx.txt";
@@ -141,6 +142,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 			}//phase shifter loop ends here   
 		}//attenuator loop ends here
 		fclose($fp);
+		sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Amp'");
 		sendSocketCommand("CALC1:FORM MLOG");
 		for($i=0;$i<1;$i++){
 			$filename="PhaseShifter".$i."_Attenuator_xx.txt";
@@ -178,6 +180,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		 //only channel1 select
 		$data="W 01 1E\r";
 		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
+		sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Phase'");
 		sendSocketCommand("CALC2:FORM PHASe");
 		for($i=0;$i<1;$i++){
 			$filename="Attenuator".$i."_PhaseShifter_xx.txt";
@@ -218,6 +221,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 			}//phase shifter loop ends here   
 		}//attenuator loop ends here
 		fclose($fp);
+		sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Amp'");
 		sendSocketCommand("CALC1:FORM MLOG");
 		for($i=0;$i<1;$i++){
 			$filename="PhaseShifter".$i."_Attenuator_xx.txt";
@@ -255,6 +259,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		 //only channel1 select
 		$data="W 02 1E\r";
 		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
+		sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Phase'");
 		sendSocketCommand("CALC2:FORM PHASe");
 		for($i=0;$i<1;$i++){
 			$filename="Attenuator".$i."_PhaseShifter_xx.txt";
@@ -295,6 +300,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 			}//phase shifter loop ends here   
 		}//attenuator loop ends here
 		fclose($fp);
+		sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Amp'");
 		sendSocketCommand("CALC1:FORM MLOG");
 		for($i=0;$i<1;$i++){
 			$filename="PhaseShifter".$i."_Attenuator_xx.txt";
@@ -332,6 +338,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		 //only channel2 select
 		$data="W 02 1E\r";
 		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
+		sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Phase'");
 		sendSocketCommand("CALC2:FORM PHASe");
 		for($i=0;$i<1;$i++){
 			$filename="Attenuator".$i."_PhaseShifter_xx.txt";
@@ -372,6 +379,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 			}//phase shifter loop ends here   
 		}//attenuator loop ends here
 		fclose($fp);
+		sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Amp'");
 		sendSocketCommand("CALC1:FORM MLOG");
 		for($i=0;$i<1;$i++){
 			$filename="PhaseShifter".$i."_Attenuator_xx.txt";
