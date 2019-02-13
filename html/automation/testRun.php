@@ -103,7 +103,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		//set output format to phase
 		sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Phase'");
 		sendSocketCommand("CALC2:FORM PHASe");
-		for($i=0;$i<1;$i++){
+		for($i=0;$i<0.5;$i=$i+0.5){
 			$filename="Attenuator".$i."_PhaseShifter_xx.txt";
 			$fp=fopen($dirName."/".$filename,'a');
 			$delta=($stopFreq-$startFreq)/($points-1);
@@ -136,7 +136,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				//store the result in a file 
 				$result=str_replace(",", "\t", $result);
 				fwrite($fp,($j)."\t".$result."\n");
-				outputProgress(($i+1)*($j+1)/2,1*64,$i,$j);
+				outputProgress((2*$i+1)*($j+1)/2,1*64,$i,$j);
 				//get sweep time and sleep for that time .
 				//sleep(1);
 			}//phase shifter loop ends here   
@@ -154,7 +154,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 			$data=dechex($val);
 			$data="W ".$data." 1A\r";
 			exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-			for($j=0;$j<64;$j++){
+			for($j=0;$j<=31.5;$j=$j+0.5){
 			//set attenuator value 
 			$val=$j;
 			$val=($val-31.5)*-2;
