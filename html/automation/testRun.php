@@ -132,6 +132,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				//$filename=$temp."_phaseShifter".$j;
 				//echo $filename;
 				$result="";
+				//trigger a measurement
 				sendSocketCommand("INITiate2;*OPC?",$result) ;
 				sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Phase'");
 				sendSocketCommand("CALCulate2:DATA? FDATA",$result);
@@ -170,7 +171,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				sendSocketCommand("CALCulate1:DATA? FDATA",$result);
 				//store the result in a file 
 				$result=str_replace(",", "\t", $result);
-				fwrite($fp,($j)."\t".$result."\n");
+				fwrite($fp,(2*$j)."\t".$result."\n");
 				outputProgress((($i+1)*(2*$j+1))/2 + 64/2,1*64,2*$j,$i);			
 			}
 		}	        	
@@ -249,7 +250,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				sendSocketCommand("CALCulate1:DATA? FDATA",$result);
 				//store the result in a file 
 				$result=str_replace(",", "\t", $result);
-				fwrite($fp,($j)."\t".$result."\n");
+				fwrite($fp,(2*$j)."\t".$result."\n");
 				outputProgress((($i+1)*(2*$j+1))/2 + 64/2,1*64,2*$j,$i);			
 			}
 		}
@@ -330,7 +331,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 			sendSocketCommand("CALCulate1:DATA? FDATA",$result);
 			//store the result in a file 
 			$result=str_replace(",", "\t", $result);
-			fwrite($fp,($j)."\t".$result."\n");
+			fwrite($fp,(2*$j)."\t".$result."\n");
 			outputProgress((($i+1)*(2*$j+1))/2 + 64/2,1*64,2*$j,$i);			
 			}
 		}
@@ -396,21 +397,21 @@ if(1 || $scpiServerCheckFlag===true  ){
 			$data="W ".$data." 25\r";
 			exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
 			for($j=0;$j<=31.5;$j=$j+0.5){
-			//set attenuator value 
-			$val=$j;
-			$val=($val-31.5)*-2;
-			$val=ceil($val);
-	       	$data=dechex($val);
-	        $data="W ".$data." 26\r";
-	        
-	        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-			sendSocketCommand("INITiate1;*OPC?",$result) ;
-			sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Amp'");
-			sendSocketCommand("CALCulate1:DATA? FDATA",$result);
-			//store the result in a file 
-			$result=str_replace(",", "\t", $result);
-			fwrite($fp,($j)."\t".$result."\n");
-			outputProgress((($i+1)*(2*$j+1))/2 + 64/2,1*64,2*$j,$i);			
+				//set attenuator value 
+				$val=$j;
+				$val=($val-31.5)*-2;
+				$val=ceil($val);
+		       	$data=dechex($val);
+		        $data="W ".$data." 26\r";
+		        
+		        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
+				sendSocketCommand("INITiate1;*OPC?",$result) ;
+				sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Amp'");
+				sendSocketCommand("CALCulate1:DATA? FDATA",$result);
+				//store the result in a file 
+				$result=str_replace(",", "\t", $result);
+				fwrite($fp,(2*$j)."\t".$result."\n");
+				outputProgress((($i+1)*(2*$j+1))/2 + 64/2,1*64,2*$j,$i);			
 			}
 		}
 	}
