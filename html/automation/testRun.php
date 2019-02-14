@@ -218,7 +218,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				//store the result in a file 
 				$result=str_replace(",", "\t", $result);
 				fwrite($fp,($j)."\t".$result."\n");
-				outputProgress((2*$i+1)*($j+1)/2,1*64,$i,$j);
+				outputProgress((2*$i+1)*($j+1)/2,1*64,2*$i,$j);
 				//get sweep time and sleep for that time .
 				//sleep(1);
 			}//phase shifter loop ends here   
