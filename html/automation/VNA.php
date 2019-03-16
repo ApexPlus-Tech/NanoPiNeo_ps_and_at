@@ -54,6 +54,12 @@ sendSocketCommand("SENSe1:SWEep:POINts ".$points);
 sendSocketCommand("SENSe1:FREQuency:STARt " .$startFreq);
 //sleep(1);
 sendSocketCommand("SENSe1:FREQuency:STOP ".$stopFreq);
+//set pulse commands
+sendSocketCommand("SENS:SWE:PULS:MODE STD");//turn ON the pulse
+sendSocketCommand("SENS1:PULS1 1");
+sendSocketCommand("SENS1:PULS:WIDT ".$pulseWidth);
+$pulsePeriod=floatval($pulseWidth)/floatval($dutycycle);
+sendSocketCommand("SENS1:PULS:PER ".$pulsePeriod);
 //sleep(1);
 sendSocketCommand("INITiate1;*OPC?");
 //sleep(1);
@@ -120,9 +126,17 @@ sendSocketCommand("CALC2:MARK9:X 3.4e9");
 sendSocketCommand("CALC2:MARK10:STAT ON");
 //sendSocketCommand("CALC2:MARK10:TYPE FIXED");
 sendSocketCommand("CALC2:MARK10:X 3.5e9");
-
-
 sendSocketCommand("DISP:ENAB ON");
+
+//ECAL commands
+// sendSocketCommand("CALC:PAR:SEL 'CH1_11_1'");
+// sendSocketCommand("SENS:CORR:COLL:CKIT:INF? ECAL1,CHAR0");
+// //alert ,how to do it in php ?
+// echo "<script>alert("Please connect ECAL kit to continue")</script>"
+// sendSocketCommand("SENS:CORR:COLL:METH SPARSOLT");
+// sendSocketCommand("SENS:CORR:PREF:ECAL:ORI ON");
+// sendSocketCommand("SENS:CORR:COLL:ACQ ECAL1,CHAR0;*OPC?")
+// echo "<script>alert("ECAL calibration done . Connect DUT")</script>"
 socket_close($socket);
-echo "Configuration done."
+//echo "Configuration done."
 ?>

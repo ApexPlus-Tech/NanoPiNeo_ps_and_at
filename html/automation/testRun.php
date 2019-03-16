@@ -89,7 +89,8 @@ sendSocketCommand("*IDN?",$result);
 //check if the result contains a PNA in the output
 $result=strtolower($result);
 $scpiServerCheckFlag=strpos($result,"pna");
-
+$warmUp=$_POST["warmUp"];
+$warmUp=intval($warmUp);
 //Note use === instead of ==
 if(1 || $scpiServerCheckFlag===true  ){
   if(isset($channelFunction)){
@@ -101,8 +102,10 @@ if(1 || $scpiServerCheckFlag===true  ){
 		$data="W 01 1E\r";
 		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
 		//set pulsed mode on PNA
+		sendSocketCommand("SENS:SWE:PULS:MODE STD");//turn ON the pulse
 		sendSocketCommand("SENS1:PULS1 1");
-		//set output format to phase
+		sleep($warmUp);
+		//set output format tao phse
 		sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Phase'");
 		sendSocketCommand("CALC2:FORM PHASe");
 		for($i=0;$i<0.5;$i=$i+0.5){
@@ -174,7 +177,9 @@ if(1 || $scpiServerCheckFlag===true  ){
 				fwrite($fp,(2*$j)."\t".$result."\n");
 				outputProgress((($i+1)*(2*$j+1))/2 + 64/2,1*64,2*$j,$i);			
 			}
-		}	        	
+		}
+		sendSocketCommand("SENS:SWE:PULS:MODE OFF");//turn OFF the pulse
+		sendSocketCommand("SENS1:PULS1 0");	        	
 	}
 	elseif ($channelFunction=="CH1_RX"){
 		//set RX mode 
@@ -183,6 +188,8 @@ if(1 || $scpiServerCheckFlag===true  ){
 		 //only channel1 select
 		$data="W 01 1E\r";
 		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
+		sendSocketCommand('OUTP ON');
+		sleep($warmUp);
 		sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Phase'");
 		sendSocketCommand("CALC2:FORM PHASe");
 		for($i=0;$i<0.5;$i=$i+0.5){
@@ -254,6 +261,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				outputProgress((($i+1)*(2*$j+1))/2 + 64/2,1*64,2*$j,$i);			
 			}
 		}
+		sendSocketCommand("OUTP OFF");
 	}
 	elseif ($channelFunction=="CH2_TX"){
 		//set TX mode 
@@ -263,7 +271,9 @@ if(1 || $scpiServerCheckFlag===true  ){
 		$data="W 02 1E\r";
 		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
 		//set pulsed mode on PNA
+		sendSocketCommand("SENS:SWE:PULS:MODE STD");//turn ON the pulse
 		sendSocketCommand("SENS1:PULS1 1");
+		sleep($warmUp);
 		sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Phase'");
 		sendSocketCommand("CALC2:FORM PHASe");
 		for($i=0;$i<0.5;$i=$i+0.5){
@@ -335,6 +345,8 @@ if(1 || $scpiServerCheckFlag===true  ){
 			outputProgress((($i+1)*(2*$j+1))/2 + 64/2,1*64,2*$j,$i);			
 			}
 		}
+		sendSocketCommand("SENS:SWE:PULS:MODE OFF");//turn ON the pulse
+		sendSocketCommand("SENS1:PULS1 0");
 	}
 	elseif ($channelFunction=="CH2_RX"){
 		//set TX mode 
@@ -343,6 +355,8 @@ if(1 || $scpiServerCheckFlag===true  ){
 		 //only channel2 select
 		$data="W 02 1E\r";
 		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
+		sendSocketCommand("OUTP ON");
+		sleep($warmUp);
 		sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Phase'");
 		sendSocketCommand("CALC2:FORM PHASe");
 		for($i=0;$i<0.5;$i=$i+0.5){
@@ -414,6 +428,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				outputProgress((($i+1)*(2*$j+1))/2 + 64/2,1*64,2*$j,$i);			
 			}
 		}
+		sendSocketCommand("OUTP OFF");
 	}
 	socket_close($socket);
 	echo("<script>window.location='/automation/zip.php'</script>");
