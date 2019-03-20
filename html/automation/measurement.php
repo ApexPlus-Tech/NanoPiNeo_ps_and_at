@@ -178,8 +178,8 @@ if(1 || $scpiServerCheckFlag===true  ){
 				outputProgress((($i+1)*(2*$j+1))/2 + 4096/2,64*64,2*$j,$i);			
 			}
 		}
-		sendSocketCommand("SENS:SWE:PULS:MODE OFF");//turn OFF the pulse
-		sendSocketCommand("SENS1:PULS1 0");	 	        	
+		sendSocketCommand("SENS1:PULS1 0");	 
+		sendSocketCommand("SENS:SWE:PULS:MODE OFF");//turn OFF the pulse		        	
 	}
 	elseif ($channelFunction=="CH1_RX"){
 		//set RX mode 
@@ -345,8 +345,8 @@ if(1 || $scpiServerCheckFlag===true  ){
 			outputProgress((($i+1)*(2*$j+1))/2 + 4096/2,64*64,2*$j,$i);			
 			}
 		}
-		sendSocketCommand("SENS:SWE:PULS:MODE OFF");//turn OFF the pulse
 		sendSocketCommand("SENS1:PULS1 0");	 
+		sendSocketCommand("SENS:SWE:PULS:MODE OFF");//turn OFF the pulse
 	}
 	elseif ($channelFunction=="CH2_RX"){
 		//set TX mode 
