@@ -129,10 +129,10 @@ sendSocketCommand("CALC2:MARK10:X 3.5e9");
 sendSocketCommand("DISP:ENAB ON");
 
 //ECAL commands
-sendSocketCommand("CALC:PAR:SEL 'CH1_11_1'");
-endSocketCommand("SENS:CORR:COLL:CKIT:INF? ECAL1,CHAR0");
+//sendSocketCommand("CALC:PAR:SEL 'CH1_11_1'");
+//endSocketCommand("SENS:CORR:COLL:CKIT:INF? ECAL1,CHAR0");
 // //alert ,how to do it in php ?
-echo "<script>alert("Please connect ECAL kit to continue")</script>"
+//echo "<script>alert("Please connect ECAL kit to continue")</script>";
 // sendSocketCommand("SENS:CORR:COLL:METH SPARSOLT");
 // sendSocketCommand("SENS:CORR:PREF:ECAL:ORI ON");
 // sendSocketCommand("SENS:CORR:COLL:ACQ ECAL1,CHAR0;*OPC?")
