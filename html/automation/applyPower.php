@@ -1,7 +1,10 @@
 <?php
 session_start();
 $host=$_SESSION['ipAddr'];
+<<<<<<< HEAD
 echo $host;
+=======
+>>>>>>> 5e23079c1ac5b8fcedde4066f5c0cee4686fd551
 //function definition
 function sendSocketCommand($cmdString){
 	$socket=$GLOBALS['socket'];
@@ -36,6 +39,7 @@ if(isset($_POST['mode'])){
 		sendSocketCommand("OUTP ON");
 	}
 	else if($_POST['mode']=="rxmode"){
+<<<<<<< HEAD
 		//sendSocketCommand("SENS:SWE:PULS:MODE OFF");
 		sendSocketCommand("OUTP OFF");
 		sendSocketCommand("SOUR2:POW ".$rxvalue);
@@ -45,6 +49,14 @@ if(isset($_POST['mode'])){
 	}
 }
 
+=======
+		sendSocketCommand("SENS:SWE:PULS:MODE OFF");
+		sendSocketCommand("SOUR1:POW ".$rxvalue);
+		sendSocketCommand("OUTP ON");
+	}
+}
+sendSocketCommand("")
+>>>>>>> 5e23079c1ac5b8fcedde4066f5c0cee4686fd551
 socket_close($socket);
 //echo "Configuration done."
 ?>
