@@ -1,10 +1,10 @@
 <?php
 session_start();
-$host=$_POST['ipAddr'];
-$_SESSION['ipAddr']=$_POST['ipAddr'];
-$_SESSION['startFreq']=$_POST['startFreq'];
-$_SESSION['stopFreq']=$_POST['stopFreq'];
-$_SESSION['points']=$_POST['points'];
+$host=$_SESSION['ipAddr'];
+//echo $ipAddr;
+$startFreq=$_SESSION['startFreq'];
+$stopFreq=$_SESSION['stopFreq'];
+$points=$_POST['points'];
 //function definition
 function sendSocketCommand($cmdString){
 	$socket=$GLOBALS['socket'];
@@ -18,8 +18,6 @@ function sendSocketCommand($cmdString){
 
 	//return $result;
 }
-
-$host=$GLOBALS['host'];
 	
 $port=5025;   //here the port no is 5025.it is not random
 	//SCPI is a protocol built over top of TCP which listens on specific port ,which is 5025 or 5024 by default
@@ -30,25 +28,14 @@ $socket = socket_create(AF_INET, SOCK_STREAM, 0) or die("Could not create socket
 socket_set_option($socket,SOL_SOCKET, SO_RCVTIMEO, array("sec"=>1, "usec"=>0));  //    if it doesn,t get reply from server it will close its connection after 5 sec
 $result = socket_connect($socket, $host, $port) or die("Could not connect to server\n");   //it has connected to server and stores its connection link in result
 //set up the parameters 
-$startFreq=$_POST['startFreq'];
-$stopFreq=$_POST['stopFreq'];
-$pulseWidth=$_POST['pulseWidth'];
-$dutyCycle=$_POST['dutyCycle'];
-$points=$_POST['points'];
-
 //COMMANDS FOR WINDOW1
-sendSocketCommand("SYSTem:FPRESET");
-sendSocketCommand("CALC:PAR:SEL 'CH1_S11_1'");
-sendSocketCommand("SENS:CORR:COLL:CKIT:INF? ECAL1,CHAR0");
-// //alert ,how to do it in php ?
-echo "<script>alert('Please connect ECAL kit to continue')</script>";
-echo "<script>window.location='/automation/bypass.php'";
+//sendSocketCommand("SYSTem:FPRESET");
+//sendSocketCommand("SYST:CHAN:DEL 1");
+//sendSocketCommand("CALCulate1:PARameter:DEFine 'Meas1_Amp',S21");
 //sleep(1);
-sendSocketCommand("CALCulate1:PARameter:DEFine 'Meas1_Amp',S21");
+//sendSocketCommand("DISPlay:WINDow1:STATe ON");
 //sleep(1);
-sendSocketCommand("DISPlay:WINDow1:STATe ON");
-//sleep(1);
-sendSocketCommand("DISPlay:WINDow1:TRACe1:FEED 'Meas1_Amp'");
+//sendSocketCommand("DISPlay:WINDow1:TRACe1:FEED 'Meas1_Amp'");
 //sleep(1);
 sendSocketCommand("INITiate1:CONTinuous OFF;*OPC?");
 //sleep(1);
@@ -56,9 +43,9 @@ sendSocketCommand("SENSe1:SWEep:TRIGger:POINt OFF");
 //sleep(1);
 sendSocketCommand("SENSe1:SWEep:POINts ".$points);
 //sleep(1);
-sendSocketCommand("SENSe1:FREQuency:STARt " .$startFreq);
+//sendSocketCommand("SENSe1:FREQuency:STARt " .$startFreq);
 //sleep(1);
-sendSocketCommand("SENSe1:FREQuency:STOP ".$stopFreq);
+//sendSocketCommand("SENSe1:FREQuency:STOP ".$stopFreq);
 //set pulse commands
 //sendSocketCommand("SENS:SWE:PULS:MODE STD");//turn ON the pulse
 //sendSocketCommand("SENS1:PULS1 1");
@@ -94,50 +81,35 @@ sendSocketCommand("CALC1:MARK4:X 3.4e9");
 sendSocketCommand("CALC1:MARK5:STAT ON");
 //sendSocketCommand("CALC1:MARK5:TYPE FIXED");
 sendSocketCommand("CALC1:MARK5:X 3.5e9");
-//COMMANDS FOR WINDOW2
-sendSocketCommand("CALCulate2:PARameter:DEFine 'Meas1_Phase',S21");
-sendSocketCommand("DISPlay:WINDow2:STATe ON");
-sendSocketCommand("DISPLay:WINDow2:TRACe2:FEED 'Meas1_Phase'");
-sendSocketCommand("INITiate2:CONTinuous OFF;*OPC?");
-sendSocketCommand("SENSe2:SWEep:TRIGger:POINt OFF");
 
-sendSocketCommand("SENSe2:SWEep:POINts ".$points);
-sendSocketCommand("SENSe2:FREQuency:STARt " .$startFreq);
-sendSocketCommand("SENSe2:FREQuency:STOP ".$stopFreq);
-sendSocketCommand("INITiate2;*OPC?");
-sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Phase'");
-sendSocketCommand("CALC2:FORM PHASe");
+
+//COMMANDS FOR WINDOW2
+//sendSocketCommand("INITiate2:CONTinuous OFF;*OPC?");
+//sendSocketCommand("SENSe2:SWEep:TRIGger:POINt OFF");
+
+//sendSocketCommand("SENSe2:SWEep:POINts ".$points);
+//sendSocketCommand("INITiate2;*OPC?");
+//sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Phase'");
+//sendSocketCommand("CALC2:FORM PHASe");
 //set the markers
 
 sendSocketCommand("CALC2:MARK6:STAT ON");
-//sendSocketCommand("CALC2:MARK6:TYPE FIXED");
 sendSocketCommand("CALC2:MARK6:X 3.1e9");
 
 
 sendSocketCommand("CALC2:MARK7:STAT ON");
-//sendSocketCommand("CALC2:MARK7:TYPE FIXED");
 sendSocketCommand("CALC2:MARK7:X 3.2e9");
 
 
 sendSocketCommand("CALC2:MARK8:STAT ON");
-//sendSocketCommand("CALC2:MARK8:TYPE FIXED");
 sendSocketCommand("CALC2:MARK8:X 3.3e9");
 
 sendSocketCommand("CALC2:MARK9:STAT ON");
-//sendSocketCommand("CALC2:MARK9:TYPE FIXED");
 sendSocketCommand("CALC2:MARK9:X 3.4e9");
 
-
 sendSocketCommand("CALC2:MARK10:STAT ON");
-//sendSocketCommand("CALC2:MARK10:TYPE FIXED");
 sendSocketCommand("CALC2:MARK10:X 3.5e9");
 sendSocketCommand("DISP:ENAB ON");
+socket_close($socket);
 
-//ECAL commands
-// sendSocketCommand("SENS:CORR:COLL:METH SPARSOLT");
-// sendSocketCommand("SENS:CORR:PREF:ECAL:ORI ON");
-// sendSocketCommand("SENS:CORR:COLL:ACQ ECAL1,CHAR0;*OPC?")
-// echo "<script>alert("ECAL calibration done . Connect DUT")</script>"
-
-//echo "Configuration done."
 ?>

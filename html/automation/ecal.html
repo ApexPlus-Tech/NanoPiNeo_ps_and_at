@@ -1,0 +1,38 @@
+<html>
+<form method="POST" action="txecal.php">
+	<p>IP address 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<input type="text" id="ipAddr" name="ipAddr"></p>
+	<p>Start Freq 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<input type="text" id="startFreq" name="startFreq"> Hz</p>
+	<p>Stop  Freq 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<input type="text" id="stopFreq" name="stopFreq"> Hz<br/></p>
+	TX PowerLevel<input name="txpowerlevel"><br/><br/>
+	RX PowerLevel<input name="rxpowerlevel"><br/><br/>
+	Pulse width:<input name="pulsewidth"><br/>
+	Duty cycle:<input name="dutycycle"><br/>
+	Points:<input name="points"><br/>
+	<br/>
+	<button type="submit">TXECAL</button>
+	</form>
+<form method="POST" action="rxecal.php">
+		<button type="submit">RXECAL</button>
+</form>
+<form method="POST" action="VNA2.php">
+No of points:<input name="points" ></input></br>
+<button type="submit">APPLY</button>
+</form>
+<br/>
+<br/>
+<form method="POST" action="testRun.php" >
+<input type="radio" name="channel" value="CH1_TX" required>Ch 1 TX<br/>
+<input type="radio" name="channel" value="CH2_TX">Ch 2 TX<br/>
+<input type="radio" name="channel" value="CH1_RX">Ch 1 RX<br/>
+<input type="radio" name="channel" value="CH2_RX">Ch 2 RX<br/>
+<br/>
+<p>Warmup time:<input type="text" id="warmUp" name="warmUp" required>sec</p>
+<p>Board name&nbsp;&nbsp;:<input type="text" id="folder" name="folder" required><br/></p>
+<button id="runMeasurement" type="submit" class="btn btn-info">Run measurement</button>
+<br/>
+</form>
+<br/>
+<br/>
+<br/>
+<br/>
+</html>	

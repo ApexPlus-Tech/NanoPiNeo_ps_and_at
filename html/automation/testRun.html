@@ -36,7 +36,16 @@
 	<p>pulseWidth 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<input type="text" id="pulseWidth" name="pulseWidth"> sec<br/></p>
 	<p>Duty cycle 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<input type="text" id="dutyCycle" name="dutyCycle"><br/></p>
 	<p>Number of points :<input type="text" id="points" name="points"><br/></p>
+	
 	<button type="submit">Apply</button>
+</form>
+
+<form method="POST" action="applyPower.php">
+<input type ="radio" name="mode" value="txmode">TX Mode<br/>
+<input type ="radio" name="mode" value="rxmode">RX Mode<br/>
+TX Value:<input name="txmodevalue" ></input><br/>
+RX Value:<input name="rxmodevalue" ></input><br/>
+<button type="submit">Apply power</button>
 </form>
 
 <br/>
@@ -68,6 +77,6 @@
 <!-- </form> -->
 <div class="footer1">
 	<strong>ApexPlus Technologies</strong>
-	<br>Software Version 1.6
+	<br>Software Version 1.7
 </div>
 </html>	
