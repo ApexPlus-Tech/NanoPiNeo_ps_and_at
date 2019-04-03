@@ -59,6 +59,17 @@ sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Amp'");
 //sleep(1);
 sendSocketCommand("FORMat ASCII");
 sendSocketCommand("CALC1:FORM MLOG");//set the Y axis to dB .
+
+//UNCOMMENT HERE
+// $delta=($stopFreq-$startFreq)/($points-1);
+// //$freqString="";
+// for($z=0;$z<$points;$z++){
+// 	$tempFreq=$startFreq+$z*$delta;
+// 	sendSocketCommand("CALC1:MARK".$z+1.":STAT ON");
+// 	sendSocketCommand("CALC1:MARK".$z+1.":X ".$tempFreq);
+// }
+//UNCOMMENT HERE
+
 sendSocketCommand("CALC1:MARK1:STAT ON");
 //sendSocketCommand("CALC1:MARK1:TYPE FIXED");
 sendSocketCommand("CALC1:MARK1:X 3.1e9");
@@ -84,15 +95,23 @@ sendSocketCommand("CALC1:MARK5:X 3.5e9");
 
 
 //COMMANDS FOR WINDOW2
-//sendSocketCommand("INITiate2:CONTinuous OFF;*OPC?");
-//sendSocketCommand("SENSe2:SWEep:TRIGger:POINt OFF");
+sendSocketCommand("INITiate2:CONTinuous OFF;*OPC?");
+sendSocketCommand("SENSe2:SWEep:TRIGger:POINt OFF");
 
 //sendSocketCommand("SENSe2:SWEep:POINts ".$points);
-//sendSocketCommand("INITiate2;*OPC?");
-//sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Phase'");
-//sendSocketCommand("CALC2:FORM PHASe");
+sendSocketCommand("INITiate2;*OPC?");
+sendSocketCommand("CALCulate2:PARameter:SELect 'Meas1_Phase'");
+sendSocketCommand("CALC2:FORM PHASe");
 //set the markers
-
+//UNCOMMENT HERE
+// $delta=($stopFreq-$startFreq)/($points-1);
+// //$freqString="";
+// for($z=0;$z<$points;$z++){
+// 	$tempFreq=$startFreq+$z*$delta;
+// 	sendSocketCommand("CALC2:MARK".$z+6.":STAT ON");
+// 	sendSocketCommand("CALC2:MARK".$z+6.":X ".$tempFreq);
+// }
+//UNCOMMENT HERE
 sendSocketCommand("CALC2:MARK6:STAT ON");
 sendSocketCommand("CALC2:MARK6:X 3.1e9");
 
@@ -111,5 +130,6 @@ sendSocketCommand("CALC2:MARK10:STAT ON");
 sendSocketCommand("CALC2:MARK10:X 3.5e9");
 sendSocketCommand("DISP:ENAB ON");
 socket_close($socket);
+echo "<script>window.history.go(-1)</script>";
 
 ?>
