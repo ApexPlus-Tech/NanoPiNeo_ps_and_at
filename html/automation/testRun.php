@@ -475,7 +475,7 @@ if(1 || $scpiServerCheckFlag===true  ){
                                 //store the result in a file
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
-					for($iter=0;$iter<$points$iter++){
+					for($iter=0;$iter<$points;$iter++){
 						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
 						if($tempValue[$iter]<-180)
 							$tempValue[$iter]+=360;

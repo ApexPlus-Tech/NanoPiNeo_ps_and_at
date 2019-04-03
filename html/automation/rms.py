@@ -3,16 +3,18 @@ import math
 filename=sys.argv[1];
 #flag=sys.argv[2];
 fp=open(filename,'r')
-POINTS=5
+#POINTS=5
 #fpOut=open(filename,'w')
 #if flag=='a' or flag=='p':
 #Do attenuator measurements
-rms=[[] for x in range(POINTS)]
+#rms=[[] for x in range(POINTS)]
 #print rms 
 lines=fp.readlines()
 nameplate=lines[0]
 #print "Nameplate :" +nameplate
 #print lines
+POINTS=len(lines[1].split('\t'))-2
+rms=[[] for x in range(POINTS)]
 lines=lines[1:]
 #convert list of float to string
 ind=0
@@ -22,7 +24,10 @@ for line in lines:
 	line=line[1:]
 	index=0
 	for num in line:
-		v=float(num)
+		try:
+			v=float(num)
+		except ValueError:
+			break
 		line[index]=v-float(value)
 		rms[index].append(line[index])
 		index=index+1
@@ -44,3 +49,4 @@ fp.close()
 fp=open(filename,'a')
 fp.write(lastString)
 fp.close()
+print "Just a test"
