@@ -412,7 +412,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				$result=str_replace(",", "\t", $result);
 				$result=str_replace("\n","",$result);
 				fwrite($fp,(63-$j)*0.5."\t".$result."\n");
-				outputProgress((($i+1)*(63-$j+1))/2 + 64/2,1*64,63-$j,$i);
+				outputProgress((($i+1)*(63-$j+1))/2 + 4096/2,4096,63-$j,$i);
 				}				
 			}//attenuator loop ends here
 			fclose($fp);
