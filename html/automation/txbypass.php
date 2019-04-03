@@ -73,6 +73,7 @@ $result = socket_connect($socket, $host, $port) or die("Could not connect to ser
 
 //sendSocketCommand("SENSe2:FREQ:STOP ".$stopFreq);
 echo "<script>alert('ECAL calibration2 done . Connect DUT')</script>";
+echo "<script>window.history.go(-1)</script>";
 socket_close($socket);
 //echo "<script>window.location='ecal.html'</script>";
 //echo "Configuration done."
