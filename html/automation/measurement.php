@@ -187,15 +187,19 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$ref=explode(",",$result);
 				//	echo $ref;
 					//$ref=array(50,50,50,50,50);
-					fwrite($fp,"0\t0\t0\t0\t0\t0\n");
-					outputProgress(((2*$i+1)*($j+1))/2,64*64,2*$i,$j);
+					$temp="0\t";
+					for($z=0;$z<$points;$z++){
+						$temp=$temp."0\t";
+					}
+					fwrite($fp,$temp."\n");
+					outputProgress(((2*$i+1)*($j+1))/2,4096,2*$i,$j);
 				//	//print_r($ref);
 				}
 				else{
                                 //store the result in a file
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
-					for($iter=0;$iter<5;$iter++){
+					for($iter=0;$iter<$points;$iter++){
 						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
 						if($tempValue[$iter]<-180)
 							$tempValue[$iter]+=360;
@@ -205,7 +209,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				$result=str_replace(",", "\t", $result);
 				$result=str_replace("\n","",$result);
 				fwrite($fp,($j*5.625)."\t".$result."\n");
-				outputProgress(((2*$i+1)*($j+1))/2 ,64*64,2*$i,$j);
+				outputProgress(((2*$i+1)*($j+1))/2 ,4096,2*$i,$j);
 				}
 				
 				//UNCOMMENT HERE
@@ -246,7 +250,11 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$ref=explode(",",$result);
 				//	echo $ref;
 					//$ref=array(50,50,50,50,50);
-					fwrite($fp,"0\t0\t0\t0\t0\t0\n");
+					$temp="0\t";
+					for($z=0;$z<$points;$z++){
+						$temp=$temp."0\t";
+					}
+					fwrite($fp,$temp."\n");
 					outputProgress((($i+1)*(2*$j+1))/2 + 4096/2,4096,2*$j,$i);
 				//	//print_r($ref);
 				}
@@ -254,7 +262,7 @@ if(1 || $scpiServerCheckFlag===true  ){
                                 //store the result in a file
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
-					for($iter=0;$iter<5;$iter++){
+					for($iter=0;$iter<$points;$iter++){
 						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
 					}
 					$result=implode("\t",$tempValue);
@@ -322,7 +330,11 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$ref=explode(",",$result);
 				//	echo $ref;
 					//$ref=array(50,50,50,50,50);
-					fwrite($fp,"0\t0\t0\t0\t0\t0\n");
+					$temp="0\t";
+					for($z=0;$z<$points;$z++){
+						$temp=$temp."0\t";
+					}
+					fwrite($fp,$temp."\n");
 					outputProgress(((2*$i+1)*($j+1))/2,4096,2*$i,$j);
 				//	//print_r($ref);
 				}
@@ -330,7 +342,7 @@ if(1 || $scpiServerCheckFlag===true  ){
                                 //store the result in a file
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
-					for($iter=0;$iter<5;$iter++){
+					for($iter=0;$iter<$points;$iter++){
 						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
 						if($tempValue[$iter]<-180)
 							$tempValue[$iter]+=360;
@@ -380,7 +392,11 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$ref=explode(",",$result);
 				//	echo $ref;
 					//$ref=array(50,50,50,50,50);
-					fwrite($fp,"0\t0\t0\t0\t0\t0\n");
+					$temp="0\t";
+					for($z=0;$z<$points;$z++){
+						$temp=$temp."0\t";
+					}
+					fwrite($fp,$temp."\n");
 					outputProgress((($i+1)*(63-$j+1))/2 + 4096/2,4096,63-$j,$i);
 				//	//print_r($ref);
 				}
@@ -388,7 +404,7 @@ if(1 || $scpiServerCheckFlag===true  ){
                                 //store the result in a file
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
-					for($iter=0;$iter<5;$iter++){
+					for($iter=0;$iter<$points;$iter++){
 						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
 					}
 					$result=implode("\t",$tempValue);
@@ -396,7 +412,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				$result=str_replace(",", "\t", $result);
 				$result=str_replace("\n","",$result);
 				fwrite($fp,(63-$j)*0.5."\t".$result."\n");
-				outputProgress((($i+1)*(63-$j+1))/2 + 4096/2,4096,63-$j,$i);
+				outputProgress((($i+1)*(63-$j+1))/2 + 64/2,1*64,63-$j,$i);
 				}				
 			}//attenuator loop ends here
 			fclose($fp);
@@ -455,7 +471,11 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$ref=explode(",",$result);
 				//	echo $ref;
 					//$ref=array(50,50,50,50,50);
-					fwrite($fp,"0\t0\t0\t0\t0\t0\n");
+					$temp="0\t";
+					for($z=0;$z<$points;$z++){
+						$temp=$temp."0\t";
+					}
+					fwrite($fp,$temp."\n");
 					outputProgress(((2*$i+1)*($j+1))/2,4096,2*$i,$j);
 				//	//print_r($ref);
 				}
@@ -463,7 +483,7 @@ if(1 || $scpiServerCheckFlag===true  ){
                                 //store the result in a file
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
-					for($iter=0;$iter<5;$iter++){
+					for($iter=0;$iter<$points;$iter++){
 						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
 						if($tempValue[$iter]<-180)
 							$tempValue[$iter]+=360;
@@ -512,7 +532,11 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$ref=explode(",",$result);
 				//	echo $ref;
 					//$ref=array(50,50,50,50,50);
-					fwrite($fp,"0\t0\t0\t0\t0\t0\n");
+					$temp="0\t";
+					for($z=0;$z<$points;$z++){
+						$temp=$temp."0\t";
+					}
+					fwrite($fp,$temp."\n");
 					outputProgress((($i+1)*(2*$j+1))/2 + 4096/2,4096,2*$j,$i);
 				//	//print_r($ref);
 				}
@@ -520,7 +544,7 @@ if(1 || $scpiServerCheckFlag===true  ){
                                 //store the result in a file
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
-					for($iter=0;$iter<5;$iter++){
+					for($iter=0;$iter<$points;$iter++){
 						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
 					}
 					$result=implode("\t",$tempValue);
@@ -600,7 +624,11 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$ref=explode(",",$result);
 				//	echo $ref;
 					//$ref=array(50,50,50,50,50);
-					fwrite($fp,"0\t0\t0\t0\t0\t0\n");
+					$temp="0\t";
+					for($z=0;$z<$points;$z++){
+						$temp=$temp."0\t";
+					}
+					fwrite($fp,$temp."\n");
 					outputProgress(((2*$i+1)*($j+1))/2,4096,2*$i,$j);
 				//	//print_r($ref);
 				}
@@ -608,7 +636,7 @@ if(1 || $scpiServerCheckFlag===true  ){
                                 //store the result in a file
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
-					for($iter=0;$iter<5;$iter++){
+					for($iter=0;$iter<$points;$iter++){
 						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
 						if($tempValue[$iter]<-180)
 							$tempValue[$iter]+=360;
@@ -671,7 +699,11 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$ref=explode(",",$result);
 				//	echo $ref;
 					//$ref=array(50,50,50,50,50);
-					fwrite($fp,"0\t0\t0\t0\t0\t0\n");
+					$temp="0\t";
+					for($z=0;$z<$points;$z++){
+						$temp=$temp."0\t";
+					}
+					fwrite($fp,$temp."\n");
 					outputProgress((($i+1)*(63-$j+1))/2 + 4096/2,4096,63-$j,$i);
 				//	//print_r($ref);
 				}
@@ -679,7 +711,7 @@ if(1 || $scpiServerCheckFlag===true  ){
                                 //store the result in a file
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
-					for($iter=0;$iter<5;$iter++){
+					for($iter=0;$iter<$points;$iter++){
 						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
 					}
 					$result=implode("\t",$tempValue);
