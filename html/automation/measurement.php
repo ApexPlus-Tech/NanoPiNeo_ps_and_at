@@ -381,7 +381,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				//	echo $ref;
 					//$ref=array(50,50,50,50,50);
 					fwrite($fp,"0\t0\t0\t0\t0\t0\n");
-					outputProgress((($i+1)*(63-$j+1))/2 + 4096/2,64*64,63-$j,$i);
+					outputProgress((($i+1)*(63-$j+1))/2 + 4096/2,4096,63-$j,$i);
 				//	//print_r($ref);
 				}
 				else{
@@ -601,7 +601,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				//	echo $ref;
 					//$ref=array(50,50,50,50,50);
 					fwrite($fp,"0\t0\t0\t0\t0\t0\n");
-					outputProgress(((2*$i+1)*($j+1))/2,64*64,2*$i,$j);
+					outputProgress(((2*$i+1)*($j+1))/2,4096,2*$i,$j);
 				//	//print_r($ref);
 				}
 				else{
@@ -618,7 +618,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				$result=str_replace(",", "\t", $result);
 				$result=str_replace("\n","",$result);
 				fwrite($fp,($j*5.625)."\t".$result."\n");
-				outputProgress(((2*$i+1)*($j+1))/2 ,64*64,2*$i,$j);
+				outputProgress(((2*$i+1)*($j+1))/2 ,4096,2*$i,$j);
 				}
 				//get sweep time and sleep for that time .
 				//sleep(1);
