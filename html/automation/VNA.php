@@ -41,8 +41,8 @@ sendSocketCommand("SYSTem:FPRESET");
 sendSocketCommand("CALC:PAR:SEL 'CH1_S11_1'");
 sendSocketCommand("SENS:CORR:COLL:CKIT:INF? ECAL1,CHAR0");
 // //alert ,how to do it in php ?
-echo "<script>alert('Please connect ECAL kit to continue')</script>";
-echo "<script>window.location='/automation/bypass.php'";
+//echo "<script>alert('Please connect ECAL kit to continue')</script>";
+//echo "<script>window.location='/automation/bypass.php'";
 //sleep(1);
 sendSocketCommand("CALCulate1:PARameter:DEFine 'Meas1_Amp',S21");
 //sleep(1);
