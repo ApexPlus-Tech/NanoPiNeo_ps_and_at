@@ -212,7 +212,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 						if($tempValue[$iter]<-180)
 							$tempValue[$iter]+=360;
 						elseif ($tempValue[$iter]>180) {
-							$tempValue[$iter]-=360
+							$tempValue[$iter]-=360;
 						}
 					}
 					$result=implode("\t",$tempValue);
@@ -366,7 +366,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 						if($tempValue[$iter]<-180)
 							$tempValue[$iter]+=360;
 						elseif ($tempValue[$iter]>180) {
-							$tempValue[$iter]-=360
+							$tempValue[$iter]-=360;
 						}
 					}
 					$result=implode("\t",$tempValue);
@@ -518,7 +518,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 						if($tempValue[$iter]<-180)
 							$tempValue[$iter]+=360;
 						elseif ($tempValue[$iter]>180) {
-							$tempValue[$iter]-=360
+							$tempValue[$iter]-=360;
 						}
 					}
 					$result=implode("\t",$tempValue);
@@ -682,7 +682,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 						if($tempValue[$iter]<-180)
 							$tempValue[$iter]+=360;
 						elseif ($tempValue[$iter]>180) {
-							$tempValue[$iter]-=360
+							$tempValue[$iter]-=360;
 						}
 					}
 					$result=implode("\t",$tempValue);
