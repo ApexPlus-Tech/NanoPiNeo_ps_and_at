@@ -149,7 +149,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		
 		//UNCOMMENT HERE
 		for($i=0;$i<=31.5;$i=$i+0.5){
-			$filename="Attenuator".2*$i."_PhaseShifter_xx.txt";
+			$filename="Attenuator".(2*$i)."_PhaseShifter_xx.txt";
 			$fp=fopen($dirName."/".$filename,'a');
 			$delta=($stopFreq-$startFreq)/($points-1);
 			$freqString="";
@@ -306,7 +306,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
 		sendSocketCommand("CALC1:FORM PHASe");
 		for($i=0;$i<=31.5;$i=$i+0.5){
-			$filename="Attenuator".2*$i."_PhaseShifter_xx.txt";
+			$filename="Attenuator".(2*$i)."_PhaseShifter_xx.txt";
 			$fp=fopen($dirName."/".$filename,'a');
 			$delta=($stopFreq-$startFreq)/($points-1);
 			$freqString="";
@@ -458,7 +458,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
 		sendSocketCommand("CALC1:FORM PHASe");
 		for($i=0;$i<=31.5;$i=$i+0.5){
-			$filename="Attenuator".2*$i."_PhaseShifter_xx.txt";
+			$filename="Attenuator".(2*$i)."_PhaseShifter_xx.txt";
 			$fp=fopen($dirName."/".$filename,'a');
 			$delta=($stopFreq-$startFreq)/($points-1);
 			$freqString="";
@@ -611,7 +611,7 @@ if(1 || $scpiServerCheckFlag===true  ){
                 sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
 		sendSocketCommand("CALC1:FORM PHASe");
 		for($i=0;$i<=31.5;$i=$i+0.5){
-			$filename="Attenuator".2*.$i."_PhaseShifter_xx.txt";
+			$filename="Attenuator".(2*.$i)."_PhaseShifter_xx.txt";
 			$fp=fopen($dirName."/".$filename,'a');
 			$delta=($stopFreq-$startFreq)/($points-1);
 			$freqString="";
