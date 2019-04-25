@@ -187,10 +187,10 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$ref=explode(",",$result);
 					//phase unwrapping
 					for($iter=0;$iter<$points;$iter++){
-						if($ref[$iter]<-180)
+						if($ref[$iter]<0)
 							$ref[$iter]+=360;
-						elseif ($ref[iter]>180) {
-							$ref[$iter]-=360;
+						else {
+							$ref[$iter]=$ref[$iter];
 						}
 					}
 				//	echo $ref;
@@ -208,11 +208,11 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
 					for($iter=0;$iter<$points;$iter++){
-						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
-						if($tempValue[$iter]<-180)
+						$tempValue[$iter]=floatval($ref[$iter])-floatval($tempValue[$iter]);
+						if($tempValue[$iter]<0)
 							$tempValue[$iter]+=360;
-						elseif ($tempValue[$iter]>180) {
-							$tempValue[$iter]-=360;
+						else {
+							$tempValue[$iter]=$tempValue[$iter];
 						}
 					}
 					$result=implode("\t",$tempValue);
@@ -274,7 +274,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
 					for($iter=0;$iter<$points;$iter++){
-						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
+						$tempValue[$iter]=floatval($ref[$iter])-floatval($tempValue[$iter]);
 					}
 					$result=implode("\t",$tempValue);
 				//store the result in a file 
@@ -343,10 +343,10 @@ if(1 || $scpiServerCheckFlag===true  ){
 					//$ref=array(50,50,50,50,50);
 					//phase unwrapping
 					for($iter=0;$iter<$points;$iter++){
-						if($ref[$iter]<-180)
+						if($ref[$iter]<0)
 							$ref[$iter]+=360;
-						elseif ($ref[iter]>180) {
-							$ref[$iter]-=360;
+						else {
+							$ref[$iter]=$ref[$iter];
 						}
 					}
 					$temp="0\t";
@@ -362,11 +362,11 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
 					for($iter=0;$iter<$points;$iter++){
-						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
-						if($tempValue[$iter]<-180)
+						$tempValue[$iter]=floatval($ref[$iter])-floatval($tempValue[$iter]);
+						if($tempValue[$iter]<0)
 							$tempValue[$iter]+=360;
-						elseif ($tempValue[$iter]>180) {
-							$tempValue[$iter]-=360;
+						else {
+							$tempValue[$iter]=$tempValue[$iter];
 						}
 					}
 					$result=implode("\t",$tempValue);
@@ -427,7 +427,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
 					for($iter=0;$iter<$points;$iter++){
-						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
+						$tempValue[$iter]=floatval($ref[$iter])-floatval($tempValue[$iter]);
 					}
 					$result=implode("\t",$tempValue);
 				//store the result in a file 
@@ -493,10 +493,10 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$ref=explode(",",$result);
 					//phase unwrapping
 					for($iter=0;$iter<$points;$iter++){
-						if($ref[$iter]<-180)
+						if($ref[$iter]<0)
 							$ref[$iter]+=360;
-						elseif ($ref[iter]>180) {
-							$ref[$iter]-=360;
+						else {
+							$ref[$iter]=$ref[$iter];
 						}
 					}
 				//	echo $ref;
@@ -514,11 +514,11 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
 					for($iter=0;$iter<$points;$iter++){
-						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
-						if($tempValue[$iter]<-180)
+						$tempValue[$iter]=floatval($ref[$iter])-floatval($tempValue[$iter]);
+						if($tempValue[$iter]<0)
 							$tempValue[$iter]+=360;
-						elseif ($tempValue[$iter]>180) {
-							$tempValue[$iter]-=360;
+						else {
+							$tempValue[$iter]=$tempValue[$iter];
 						}
 					}
 					$result=implode("\t",$tempValue);
@@ -578,7 +578,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
 					for($iter=0;$iter<$points;$iter++){
-						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
+						$tempValue[$iter]=floatval($ref[$iter])-floatval($tempValue[$iter]);
 					}
 					$result=implode("\t",$tempValue);
 				//store the result in a file 
@@ -657,10 +657,10 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$ref=explode(",",$result);
 					//phase unwrapping
 					for($iter=0;$iter<$points;$iter++){
-						if($ref[$iter]<-180)
+						if($ref[$iter]<0)
 							$ref[$iter]+=360;
-						elseif ($ref[iter]>180) {
-							$ref[$iter]-=360;
+						else {
+							$ref[$iter]=$ref[$iter];
 						}
 					}
 				//	echo $ref;
@@ -678,11 +678,11 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
 					for($iter=0;$iter<$points;$iter++){
-						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
-						if($tempValue[$iter]<-180)
+						$tempValue[$iter]=floatval($ref[$iter])-floatval($tempValue[$iter]);
+						if($tempValue[$iter]<0)
 							$tempValue[$iter]+=360;
-						elseif ($tempValue[$iter]>180) {
-							$tempValue[$iter]-=360;
+						else {
+							$tempValue[$iter]=$tempValue[$iter];
 						}
 					}
 					$result=implode("\t",$tempValue);
@@ -756,7 +756,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
 					for($iter=0;$iter<$points;$iter++){
-						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
+						$tempValue[$iter]=floatval($ref[$iter])-floatval($tempValue[$iter]);
 					}
 					$result=implode("\t",$tempValue);
 				//store the result in a file 
