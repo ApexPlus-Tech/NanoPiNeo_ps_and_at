@@ -34,11 +34,11 @@ $socket = socket_create(AF_INET, SOCK_STREAM, 0) or die("Could not create socket
 socket_set_option($socket,SOL_SOCKET, SO_RCVTIMEO, array("sec"=>1, "usec"=>0));  //    if it doesn,t get reply from server it will close its connection after 5 sec
 $result = socket_connect($socket, $host, $port) or die("Could not connect to server\n");   //it has connected to server and stores its connection link in result
 //set up the parameters 
-$startFreq=$_POST['startFreq'];
-$stopFreq=$_POST['stopFreq'];
-$pulseWidth=$_POST['pulseWidth'];
-$dutyCycle=$_POST['dutyCycle'];
-$points=$_POST['points'];
+//$startFreq=$_POST['startFreq'];
+//$stopFreq=$_POST['stopFreq'];
+//$pulseWidth=$_POST['pulseWidth'];
+//$dutyCycle=$_POST['dutyCycle'];
+//$points=$_POST['points'];
 
 //COMMANDS FOR WINDOW1
 /*sendSocketCommand("SYSTem:FPRESET");
