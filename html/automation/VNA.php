@@ -1,4 +1,8 @@
 <?php
+set_time_limit(0); 
+ignore_user_abort(true);
+ini_set('max_execution_time', 0);
+ini_set('session.gc_maxlifetime', 14400);
 session_start();
 $host=$_POST['ipAddr'];
 $_SESSION['ipAddr']=$_POST['ipAddr'];
@@ -37,7 +41,7 @@ $dutyCycle=$_POST['dutyCycle'];
 $points=$_POST['points'];
 
 //COMMANDS FOR WINDOW1
-sendSocketCommand("SYSTem:FPRESET");
+/*sendSocketCommand("SYSTem:FPRESET");
 sendSocketCommand("CALC:PAR:SEL 'CH1_S11_1'");
 sendSocketCommand("SENS:CORR:COLL:CKIT:INF? ECAL1,CHAR0");
 // //alert ,how to do it in php ?
@@ -146,5 +150,6 @@ echo "<script>window.history.go(-1)</script>";
 // sendSocketCommand("SENS:CORR:COLL:ACQ ECAL1,CHAR0;*OPC?")
 // echo "<script>alert("ECAL calibration done . Connect DUT")</script>"
 
-//echo "Configuration done."
+//echo "Configuration done."*/
+socket_close($socket);
 ?>

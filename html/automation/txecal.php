@@ -1,4 +1,8 @@
 <?php
+set_time_limit(0); 
+ignore_user_abort(true);
+ini_set('max_execution_time', 0);
+ini_set('session.gc_maxlifetime', 14400);
 session_start();
 $host=$_POST['ipAddr'];
 $_SESSION['ipAddr']=$_POST['ipAddr'];
