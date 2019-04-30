@@ -4,18 +4,9 @@ ignore_user_abort(true);
 ini_set('max_execution_time', 0);
 ini_set('session.gc_maxlifetime', 14400);
 session_start();
-$host=$_POST['ipAddr'];
-$_SESSION['ipAddr']=$_POST['ipAddr'];
-$_SESSION['startFreq']=$_POST['startFreq'];
-$_SESSION['stopFreq']=$_POST['stopFreq'];
-$_SESSION['value']=$_POST['powerlevel'];
-$_SESSION['txpowerlevel']=$_POST['txpowerlevel'];
-$_SESSION['rxpowerlevel']=$_POST['rxpowerlevel'];
-$_SESSION['pulsewidth']=$_POST['pulsewidth'];
-$_SESSION['dutycycle']=$_POST['dutycycle'];
-$_SESSION['points']=$_POST['points'];
-$startFreq=$_POST['startFreq'];
-$stopFreq=$_POST['stopFreq'];
+
+$startFreq=$_SESSION['startFreq'];
+$stopFreq=$_SESSION['stopFreq'];
 //function definition
 function sendSocketCommand($cmdString){
 	$socket=$GLOBALS['socket'];
@@ -62,7 +53,7 @@ sendSocketCommand("CALC1:FORM PHASe");
 sendSocketCommand("SENSe1:FREQuency:STARt " .$startFreq);
 //sleep(1);
 sendSocketCommand("SENSe1:FREQuency:STOP ".$stopFreq);
-$points=$_POST['points'];
+$points=$_SESSION['points'];
 sendSocketCommand("SENSe1:SWEep:POINts ".$points);
 
 /*
@@ -82,15 +73,15 @@ sendSocketCommand("SOUR1:POW ".$value);
 
 
 
-$pulsewidth=$_POST['pulsewidth'];
-$dutycycle=$_POST['dutycycle'];
+$pulsewidth=$_SESSION['pulsewidth'];
+$dutycycle=$_SESSION['dutycycle'];
                 //echo $dutycycle;
 sendSocketCommand("SENS1:PULS:WIDT ".$pulsewidth);
 $pulsePeriod=floatval($pulsewidth)/floatval($dutycycle);
                 //echo ($pulsewidth);
 sendSocketCommand("SENS1:PULS:PER ".$pulsePeriod);
 
-$value=$_POST['txpowerlevel'];
+$value=$_SESSION['txpowerlevel'];
 sendSocketCommand("SOUR1:POW ".$value);
 
 

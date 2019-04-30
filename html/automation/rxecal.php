@@ -1,8 +1,24 @@
 <?php
 session_start();
-$host=$_SESSION['ipAddr'];
-$startFreq=$_SESSION['startFreq'];
-$stopFreq=$_SESSION['stopFreq'];
+set_time_limit(0); 
+ignore_user_abort(true);
+ini_set('max_execution_time', 0);
+ini_set('session.gc_maxlifetime', 14400);
+session_start();
+$host=$_POST['ipAddr'];
+$_SESSION['ipAddr']=$_POST['ipAddr'];
+$_SESSION['startFreq']=$_POST['startFreq'];
+$_SESSION['stopFreq']=$_POST['stopFreq'];
+$_SESSION['value']=$_POST['powerlevel'];
+$_SESSION['txpowerlevel']=$_POST['txpowerlevel'];
+$_SESSION['rxpowerlevel']=$_POST['rxpowerlevel'];
+$_SESSION['pulsewidth']=$_POST['pulsewidth'];
+$_SESSION['dutycycle']=$_POST['dutycycle'];
+$_SESSION['points']=$_POST['points'];
+
+$startFreq=$_POST['startFreq'];
+$stopFreq=$_POST['stopFreq'];
+
 //function definition
 function sendSocketCommand($cmdString){
 	$socket=$GLOBALS['socket'];
