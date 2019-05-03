@@ -151,6 +151,9 @@ if(1 || $scpiServerCheckFlag===true  ){
 		for($i=0;$i<0.5;$i=$i+0.5){
 			$filename="Attenuator".$i."_PhaseShifter_xx.txt";
 			$fp=fopen($dirName."/".$filename,'a');
+			//Remove debug lines
+			$debugFilename="Attenuator".$i."_PhaseShifter_xx_before_normalization.txt";
+			$debugFp=fopen($dirName."/".$debugFilename,'a');
 			$delta=($stopFreq-$startFreq)/($points-1);
 			$freqString="";
 			for($z=0;$z<$points;$z++){
@@ -159,6 +162,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 			}
 			$firstLine="PhaseState\t$freqString";
 			fwrite($fp,$firstLine."\n");
+			fwrite($debugFp,$firstLine."\n");//remove this line
 			//set attenuator value 
 			$val=$i;
 			$val=($val-31.5)*-2;
@@ -185,6 +189,8 @@ if(1 || $scpiServerCheckFlag===true  ){
 				if($j==0){
 					//store the first value as reference
 					$ref=explode(",",$result);
+					//remove this line
+					$debugRef=$ref;
 					//phase unwrapping
 					for($iter=0;$iter<$points;$iter++){
 						if($ref[$iter]<0)
@@ -200,6 +206,10 @@ if(1 || $scpiServerCheckFlag===true  ){
 						$temp=$temp."0\t";
 					}
 					fwrite($fp,$temp."\n");
+					//remove these two lines
+					$debugRef=implode("\t",$debugRef);
+					$debugRef=str_replace("\n","",$debugRef);
+					fwrite($debugFp,"0\t".$debugRef."\n");
 					outputProgress(((2*$i+1)*($j+1))/2,1*64,2*$i,$j);
 				//	//print_r($ref);
 				}
@@ -207,6 +217,8 @@ if(1 || $scpiServerCheckFlag===true  ){
                                 //store the result in a file
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
+					//remove this line
+					$debugTemp=$tempValue;
 					for($iter=0;$iter<$points;$iter++){
 						$tempValue[$iter]=floatval($ref[$iter])-floatval($tempValue[$iter]);
 						if($tempValue[$iter]<0)
@@ -216,10 +228,13 @@ if(1 || $scpiServerCheckFlag===true  ){
 						}
 					}
 					$result=implode("\t",$tempValue);
+					$debugTemp=implode("\t",$debugTemp);//remove this line
 				//store the result in a file 
 				$result=str_replace(",", "\t", $result);
 				$result=str_replace("\n","",$result);
+				$debugTemp=str_replace("\n","",$debugTemp);//remove this line
 				fwrite($fp,($j*5.625)."\t".$result."\n");
+				fwrite($debugFp,($j*5.625)."\t".$debugTemp."\n");//remove this line
 				outputProgress(((2*$i+1)*($j+1))/2 ,1*64,2*$i,$j);
 				}
 				
@@ -228,6 +243,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				//sleep(1);
 			}//phase shifter loop ends here
 			fclose($fp);
+			fclose($debugFp);
 			$fullFilePath=$dirName.'/'.$filename;
 			exec('/usr/bin/python /var/www/automation/rms.py "'.$fullFilePath.'"');   
 		}//attenuator loop ends here
@@ -308,6 +324,9 @@ if(1 || $scpiServerCheckFlag===true  ){
 		for($i=0;$i<0.5;$i=$i+0.5){
 			$filename="Attenuator".$i."_PhaseShifter_xx.txt";
 			$fp=fopen($dirName."/".$filename,'a');
+			//Remove debug lines
+			$debugFilename="Attenuator".$i."_PhaseShifter_xx_before_normalization.txt";
+			$debugFp=fopen($dirName."/".$debugFilename,'a');
 			$delta=($stopFreq-$startFreq)/($points-1);
 			$freqString="";
 			for($z=0;$z<$points;$z++){
@@ -316,6 +335,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 			}
 			$firstLine="PhaseState\t$freqString";
 			fwrite($fp,$firstLine."\n");
+			fwrite($debugFp,$firstLine."\n");//remove this line
 			//set attenuator value 
 			$val=$i;
 			$val=($val-31.5)*-2;
@@ -339,6 +359,8 @@ if(1 || $scpiServerCheckFlag===true  ){
 				 if($j==0){
 					//store the first value as reference
 					$ref=explode(",",$result);
+					//remove this line
+					$debugRef=$ref;
 				//	echo $ref;
 					//$ref=array(50,50,50,50,50);
 					//phase unwrapping
@@ -354,6 +376,10 @@ if(1 || $scpiServerCheckFlag===true  ){
 						$temp=$temp."0\t";
 					}
 					fwrite($fp,$temp."\n");
+					//remove these two lines
+					$debugRef=implode("\t",$debugRef);
+					$debugRef=str_replace("\n","",$debugRef);
+					fwrite($debugFp,"0\t".$debugRef."\n");
 					outputProgress(((2*$i+1)*($j+1))/2,1*64,2*$i,$j);
 				//	//print_r($ref);
 				}
@@ -361,6 +387,8 @@ if(1 || $scpiServerCheckFlag===true  ){
                                 //store the result in a file
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
+					//remove this line
+					$debugTemp=$tempValue;
 					for($iter=0;$iter<$points;$iter++){
 						$tempValue[$iter]=floatval($ref[$iter])-floatval($tempValue[$iter]);
 						if($tempValue[$iter]<0)
@@ -370,16 +398,20 @@ if(1 || $scpiServerCheckFlag===true  ){
 						}
 					}
 					$result=implode("\t",$tempValue);
+					$debugTemp=implode("\t",$debugTemp);//remove this line
 				//store the result in a file 
 				$result=str_replace(",", "\t", $result);
 				$result=str_replace("\n","",$result);
+				$debugTemp=str_replace("\n","",$debugTemp);//remove this line
 				fwrite($fp,($j*5.625)."\t".$result."\n");
+				fwrite($debugFp,($j*5.625)."\t".$debugTemp."\n");//remove this line
 				outputProgress(((2*$i+1)*($j+1))/2 ,1*64,2*$i,$j);
 				}
 				//get sweep time and sleep for that time .
 				//sleep(1);
 			}//phase shifter loop ends here 
 			fclose($fp);
+			fclose($debugFp);
 			$fullFilePath=$dirName.'/'.$filename;
 			exec('/usr/bin/python /var/www/automation/rms.py "'.$fullFilePath.'"');  
 		}//attenuator loop ends here
@@ -460,6 +492,9 @@ if(1 || $scpiServerCheckFlag===true  ){
 		for($i=0;$i<0.5;$i=$i+0.5){
 			$filename="Attenuator".$i."_PhaseShifter_xx.txt";
 			$fp=fopen($dirName."/".$filename,'a');
+			//Remove debug lines
+			$debugFilename="Attenuator".$i."_PhaseShifter_xx_before_normalization.txt";
+			$debugFp=fopen($dirName."/".$debugFilename,'a');
 			$delta=($stopFreq-$startFreq)/($points-1);
 			$freqString="";
 			for($z=0;$z<$points;$z++){
@@ -468,6 +503,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 			}
 			$firstLine="PhaseState\t$freqString";
 			fwrite($fp,$firstLine."\n");
+			fwrite($debugFp,$firstLine."\n");//remove this line
 			//set attenuator value 
 			$val=$i;
 			$val=($val-31.5)*-2;
@@ -491,6 +527,8 @@ if(1 || $scpiServerCheckFlag===true  ){
 				if($j==0){
 					//store the first value as reference
 					$ref=explode(",",$result);
+					//remove this line
+					$debugRef=$ref;
 					//phase unwrapping
 					for($iter=0;$iter<$points;$iter++){
 						if($ref[$iter]<0)
@@ -506,6 +544,10 @@ if(1 || $scpiServerCheckFlag===true  ){
 						$temp=$temp."0\t";
 					}
 					fwrite($fp,$temp."\n");
+					//remove these two lines
+					$debugRef=implode("\t",$debugRef);
+					$debugRef=str_replace("\n","",$debugRef);
+					fwrite($debugFp,"0\t".$debugRef."\n");
 					outputProgress(((2*$i+1)*($j+1))/2,1*64,2*$i,$j);
 				//	//print_r($ref);
 				}
@@ -513,6 +555,8 @@ if(1 || $scpiServerCheckFlag===true  ){
                                 //store the result in a file
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
+					//remove this line
+					$debugTemp=$tempValue;
 					for($iter=0;$iter<$points;$iter++){
 						$tempValue[$iter]=floatval($ref[$iter])-floatval($tempValue[$iter]);
 						if($tempValue[$iter]<0)
@@ -522,16 +566,20 @@ if(1 || $scpiServerCheckFlag===true  ){
 						}
 					}
 					$result=implode("\t",$tempValue);
+					$debugTemp=implode("\t",$debugTemp);//remove this line
 				//store the result in a file 
 				$result=str_replace(",", "\t", $result);
 				$result=str_replace("\n","",$result);
+				$debugTemp=str_replace("\n","",$debugTemp);//remove this line
 				fwrite($fp,($j*5.625)."\t".$result."\n");
+				fwrite($debugFp,($j*5.625)."\t".$debugTemp."\n");//remove this line
 				outputProgress(((2*$i+1)*($j+1))/2 ,1*64,2*$i,$j);
 				}
 				//get sweep time and sleep for that time .
 				//sleep(1);
 			}//phase shifter loop ends here 
 			fclose($fp);
+			fclose($debugFp);
 			$fullFilePath=$dirName.'/'.$filename;
 			exec('/usr/bin/python /var/www/automation/rms.py "'.$fullFilePath.'"');  
 		}//attenuator loop ends here
@@ -608,11 +656,14 @@ if(1 || $scpiServerCheckFlag===true  ){
 		sleep($warmUp);
 		
 
-                sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
+        sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
 		sendSocketCommand("CALC1:FORM PHASe");
 		for($i=0;$i<0.5;$i=$i+0.5){
 			$filename="Attenuator".$i."_PhaseShifter_xx.txt";
 			$fp=fopen($dirName."/".$filename,'a');
+			//Remove debug lines
+			$debugFilename="Attenuator".$i."_PhaseShifter_xx_before_normalization.txt";
+			$debugFp=fopen($dirName."/".$debugFilename,'a');
 			$delta=($stopFreq-$startFreq)/($points-1);
 			$freqString="";
 			for($z=0;$z<$points;$z++){
@@ -621,6 +672,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 			}
 			$firstLine="PhaseState\t$freqString";
 			fwrite($fp,$firstLine."\n");
+			fwrite($debugFp,$firstLine."\n");//remove this line
 			//set attenuator value 
 			$val=$i;
 			$val=($val-31.5)*-2;
@@ -655,6 +707,8 @@ if(1 || $scpiServerCheckFlag===true  ){
 				 if($j==0){
 					//store the first value as reference
 					$ref=explode(",",$result);
+					//remove this line
+					$debugRef=$ref;
 					//phase unwrapping
 					for($iter=0;$iter<$points;$iter++){
 						if($ref[$iter]<0)
@@ -670,6 +724,10 @@ if(1 || $scpiServerCheckFlag===true  ){
 						$temp=$temp."0\t";
 					}
 					fwrite($fp,$temp."\n");
+					//remove these two lines
+					$debugRef=implode("\t",$debugRef);
+					$debugRef=str_replace("\n","",$debugRf);
+					fwrite($debugFp,"0\t".$debugRef."\n");
 					outputProgress(((2*$i+1)*($j+1))/2,1*64,2*$i,$j);
 				//	//print_r($ref);
 				}
@@ -677,6 +735,8 @@ if(1 || $scpiServerCheckFlag===true  ){
                                 //store the result in a file
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
+					//remove this line
+					$debugTemp=$tempValue;
 					for($iter=0;$iter<$points;$iter++){
 						$tempValue[$iter]=floatval($ref[$iter])-floatval($tempValue[$iter]);
 						if($tempValue[$iter]<0)
@@ -686,16 +746,20 @@ if(1 || $scpiServerCheckFlag===true  ){
 						}
 					}
 					$result=implode("\t",$tempValue);
+					$debugTemp=str_replace("\n","",$debugTemp);//remove this line
+					$debugTemp=implode("\t",$debugTemp);//remove this line
 				//store the result in a file 
 				$result=str_replace(",", "\t", $result);
 				$result=str_replace("\n","",$result);
 				fwrite($fp,($j*5.625)."\t".$result."\n");
+				fwrite($debugFp,($j*5.625)."\t".$debugTemp."\n");//remove this line
 				outputProgress(((2*$i+1)*($j+1))/2 ,1*64,2*$i,$j);
 				}
 				//get sweep time and sleep for that time .
 				//sleep(1);
 			}//phase shifter loop ends here
 		 fclose($fp);
+		 fclose($debugFp);
                  $fullFilePath=$dirName.'/'.$filename;
                  exec('/usr/bin/python /var/www/automation/rms.py "'.$fullFilePath.'"');
    
