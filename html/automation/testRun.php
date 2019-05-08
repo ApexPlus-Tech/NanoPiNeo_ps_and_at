@@ -9,7 +9,13 @@ $startFreq=$_SESSION['startFreq'];
 $stopFreq=$_SESSION['stopFreq'];
 $points=$_SESSION['points'];
 $_SESSION['folder']=$_POST['folder'];
-
+if (empty($host) ){ //if the string is empty i.e. session has expired
+	$fileArray=file("/var/www/automation/basic_session.txt") or die("Could not open basic session file.");
+	$host=str_replace(array("\n","\r"),'', $fileArray[0]);
+	$startFreq=str_replace(array("\n","\r"),'', $fileArray[1]);
+	$stopFreq=str_replace(array("\n","\r"),'', $fileArray[2]);
+	$points=str_replace(array("\n","\r"),'', $fileArray[3]);
+}
 
 
 
