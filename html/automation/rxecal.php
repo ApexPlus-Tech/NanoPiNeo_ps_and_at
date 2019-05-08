@@ -15,7 +15,12 @@ $_SESSION['rxpowerlevel']=$_POST['rxpowerlevel'];
 $_SESSION['pulsewidth']=$_POST['pulsewidth'];
 $_SESSION['dutycycle']=$_POST['dutycycle'];
 $_SESSION['points']=$_POST['points'];
-
+$sessionFile=fopen("/var/www/automation/basic_session.txt",'w') or die("Could not open basic session file");
+fwrite($sessionFile,$_POST['ipAddr']."\n");
+fwrite($sessionFile,$_POST['startFreq']."\n");
+fwrite($sessionFile,$_POST['stopFreq']."\n");
+fwrite($sessionFile,$_POST['points']."\n");
+fclose($sessionFile);
 $startFreq=$_POST['startFreq'];
 $stopFreq=$_POST['stopFreq'];
 

@@ -5,6 +5,8 @@ $_SESSION['ipAddr']=$_POST['ipAddr'];
 $_SESSION['startFreq']=$_POST['startFreq'];
 $_SESSION['stopFreq']=$_POST['stopFreq'];
 $_SESSION['value']=$_POST['powerlevel'];
+
+
 $startFreq=$_POST['startFreq'];
 $stopFreq=$_POST['stopFreq'];
 //function definition
