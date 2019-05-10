@@ -9,6 +9,13 @@ $_SESSION['ipAddr']=$_POST['ipAddr'];
 $_SESSION['startFreq']=$_POST['startFreq'];
 $_SESSION['stopFreq']=$_POST['stopFreq'];
 $_SESSION['points']=$_POST['points'];
+$sessionFile=fopen("/var/www/automation/basic_session.txt",'w') or die("Could not open basic session file");
+fwrite($sessionFile,$_POST['ipAddr']."\n");
+fwrite($sessionFile,$_POST['startFreq']."\n");
+fwrite($sessionFile,$_POST['stopFreq']."\n");
+fwrite($sessionFile,$_POST['points']."\n");
+fclose($sessionFile);
+
 //function definition
 function sendSocketCommand($cmdString){
 	$socket=$GLOBALS['socket'];

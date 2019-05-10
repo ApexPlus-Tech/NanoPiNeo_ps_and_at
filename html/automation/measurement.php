@@ -2,14 +2,20 @@
 set_time_limit(0); 
 ignore_user_abort(true);
 ini_set('max_execution_time', 0);
-ini_set('session.gc_maxlifetime', 7200);
+ini_set('session.gc_maxlifetime', 14400);
 session_start();
 $host=$_SESSION['ipAddr'];
 $startFreq=$_SESSION['startFreq'];
 $stopFreq=$_SESSION['stopFreq'];
 $points=$_SESSION['points'];
 $_SESSION['folder']=$_POST['folder'];
-
+if (empty($host) ){ //if the string is empty i.e. session has expired
+	$fileArray=file("/var/www/automation/basic_session.txt") or die("Could not open basic session file.");
+	$host=str_replace(array("\n","\r"),'', $fileArray[0]);
+	$startFreq=str_replace(array("\n","\r"),'', $fileArray[1]);
+	$stopFreq=str_replace(array("\n","\r"),'', $fileArray[2]);
+	$points=str_replace(array("\n","\r"),'', $fileArray[3]);
+}
 
 
 
@@ -143,102 +149,9 @@ if(1 || $scpiServerCheckFlag===true  ){
 		//sendSocketCommand("SENS1:PULS1 1");
 		sendSocketCommand("sense1:correction:cset:activate 'Tx_Ecal_Pulse',1");
 		sleep($warmUp);
-		//set output format tao phse
-		sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
-		sendSocketCommand("CALC1:FORM PHASe");
-		
-		//UNCOMMENT HERE
-		for($i=0;$i<=31.5;$i=$i+0.5){
-			$filename="Attenuator".(2*$i)."_PhaseShifter_xx.txt";
-			$fp=fopen($dirName."/".$filename,'a');
-			$delta=($stopFreq-$startFreq)/($points-1);
-			$freqString="";
-			for($z=0;$z<$points;$z++){
-				$tempFreq=$startFreq+$z*$delta;
-				$freqString=$freqString.$tempFreq."\t";
-			}
-			$firstLine="PhaseState\t$freqString";
-			fwrite($fp,$firstLine."\n");
-			//set attenuator value 
-			$val=$i;
-			$val=($val-31.5)*-2;
-			$val=ceil($val);
-	        $data=dechex($val);
-	        $data="W ".$data." 1B\r";
-	        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-			for($j=0;$j<64;$j++){
-				//send phase shifter value
-				//UNCOMMENT HERE
-				
-				$val=$j;
-				$data=dechex($val);
-				$data="W ".$data." 1A\r";
-				exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-				//$filename=$temp."_phaseShifter".$j;
-				//echo $filename;
-				$result="";
-				//trigger a measurement
-				//sendSocketCommand("INITiate2;*OPC?") ;
-				sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
-				sendandReceiveSocket("CALCulate1:DATA? FDATA",$result);
-				//store the result in a file 
-				if($j==0){
-					//store the first value as reference
-					$ref=explode(",",$result);
-					//phase unwrapping
-					for($iter=0;$iter<$points;$iter++){
-						if($ref[$iter]<-180)
-							$ref[$iter]+=360;
-						elseif ($ref[iter]>180) {
-							$ref[$iter]-=360;
-						}
-					}
-				//	echo $ref;
-					//$ref=array(50,50,50,50,50);
-					$temp="0\t";
-					for($z=0;$z<$points;$z++){
-						$temp=$temp."0\t";
-					}
-					fwrite($fp,$temp."\n");
-					outputProgress(((2*$i+1)*($j+1))/2,4096,2*$i,$j);
-				//	//print_r($ref);
-				}
-				else{
-                                //store the result in a file
-					$result=str_replace("\n","",$result); 
-					$tempValue=explode(",",$result);
-					for($iter=0;$iter<$points;$iter++){
-						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
-						if($tempValue[$iter]<-180)
-							$tempValue[$iter]+=360;
-						elseif ($tempValue[$iter]>180) {
-							$tempValue[$iter]-=360;
-						}
-					}
-					$result=implode("\t",$tempValue);
-				//store the result in a file 
-				$result=str_replace(",", "\t", $result);
-				$result=str_replace("\n","",$result);
-				fwrite($fp,($j*5.625)."\t".$result."\n");
-				outputProgress(((2*$i+1)*($j+1))/2 ,4096,2*$i,$j);
-				}
-				
-				//UNCOMMENT HERE
-				//get sweep time and sleep for that time .
-				//sleep(1);
-			}//phase shifter loop ends here
-			fclose($fp);
-			$fullFilePath=$dirName.'/'.$filename;
-			exec('/usr/bin/python /var/www/automation/rms.py "'.$fullFilePath.'"');   
-		}//attenuator loop ends here
-
-		sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Amp'");
-		sendSocketCommand("CALC1:FORM MLOG");
 		for($i=0;$i<64;$i++){
-			$filename="PhaseShifter".$i."_Attenuator_xx.txt";
-			$fp=fopen($dirName."/".$filename,'a');
-			$firstLine="AttenuatorState\t$freqString";		
-			fwrite($fp,$firstLine."\n"); 
+			$filename="Phase".$i.".txt";
+			$fp=fopen($dirName."/".$filename,'a'); 
 			//send phase shifter value
 			$val=$i;
 			$data=dechex($val);
@@ -253,45 +166,27 @@ if(1 || $scpiServerCheckFlag===true  ){
 		        $data="W ".$data." 1B\r";
 		        
 		        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-				//sendSocketCommand("INITiate1;*OPC?") ;
-				sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Amp'");
+		        sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
+				sendSocketCommand("CALC1:FORM PHASe");
 				sendandReceiveSocket("CALCulate1:DATA? FDATA",$result);
-				if($j==0){
-					//store the first value as reference
-					$ref=explode(",",$result);
-				//	echo $ref;
-					//$ref=array(50,50,50,50,50);
-					$temp="0\t";
-					for($z=0;$z<$points;$z++){
-						$temp=$temp."0\t";
-					}
-					fwrite($fp,$temp."\n");
-					outputProgress((($i+1)*(2*$j+1))/2 + 4096/2,4096,2*$j,$i);
-				//	//print_r($ref);
-				}
-				else{
-                                //store the result in a file
-					$result=str_replace("\n","",$result); 
-					$tempValue=explode(",",$result);
-					for($iter=0;$iter<$points;$iter++){
-						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
-					}
-					$result=implode("\t",$tempValue);
-				//store the result in a file 
-				$result=str_replace(",", "\t", $result);
 				$result=str_replace("\n","",$result);
-				fwrite($fp,($j)."\t".$result."\n");
-				outputProgress((($i+1)*(2*$j+1))/2 + 4096/2,4096,2*$j,$i);
+				fwrite($fp,$j."\t".$result."\n");
+				//sendSocketCommand("INITiate1;*OPC?") ;
+
+				sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Amp'");
+				sendSocketCommand("CALC1:FORM MLOG");
+				sendandReceiveSocket("CALCulate1:DATA? FDATA",$result);
+				//strip /n 
+				$result=str_replace("\n","",$result);
+				fwrite($fp,"\t".$result."\n");
+
+
+				outputProgress((($i+1)*(2*$j+1)),64*64,2*$j,$i);
 				}
-			}//Attenuator for loop ends here 
-			//echo $filename;
-			fclose($fp);
-			$fullFilePath=$dirName.'/'.$filename;
-			exec('/usr/bin/python /var/www/automation/rms.py "'.$fullFilePath.'"');
-			//exec('/usr/bin/python /var/www/automation/boards
-		}
-		//sendSocketCommand("SENS1:PULS1 0");
-		//sendSocketCommand("SENS:SWE:PULS:MODE OFF");//turn OFF the pulse		        	
+				fclose($fp);
+			}//Phase shifter for loop ends here 
+			
+		}		        	
 	}
 	elseif ($channelFunction=="CH1_RX"){
 		//set TX mode 
@@ -306,7 +201,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
 		sendSocketCommand("CALC1:FORM PHASe");
 		for($i=0;$i<=31.5;$i=$i+0.5){
-			$filename="Attenuator".(2*$i)."_PhaseShifter_xx.txt";
+			$filename="Attenuator".$i."_PhaseShifter_xx.txt";
 			$fp=fopen($dirName."/".$filename,'a');
 			$delta=($stopFreq-$startFreq)/($points-1);
 			$freqString="";
@@ -339,22 +234,24 @@ if(1 || $scpiServerCheckFlag===true  ){
 				 if($j==0){
 					//store the first value as reference
 					$ref=explode(",",$result);
-					//phase unwrapping
-					for($iter=0;$iter<$points;$iter++){
-						if($ref[$iter]<-180)
-							$ref[$iter]+=360;
-						elseif ($ref[iter]>180) {
-							$ref[$iter]-=360;
-						}
-					}
 				//	echo $ref;
 					//$ref=array(50,50,50,50,50);
+					//phase unwrapping
+					for($iter=0;$iter<$points;$iter++){
+						if($ref[$iter]<0)
+							$ref[$iter]+=360;
+						else {
+							$ref[$iter]=$ref[$iter];
+						}
+						if($ref[$iter]>360)
+							$ref[$iter]-=360;
+					}
 					$temp="0\t";
 					for($z=0;$z<$points;$z++){
 						$temp=$temp."0\t";
 					}
 					fwrite($fp,$temp."\n");
-					outputProgress(((2*$i+1)*($j+1))/2,4096,2*$i,$j);
+					outputProgress(((2*$i+1)*($j+1))/2,64*64,2*$i,$j);
 				//	//print_r($ref);
 				}
 				else{
@@ -362,19 +259,21 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
 					for($iter=0;$iter<$points;$iter++){
-						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
-						if($tempValue[$iter]<-180)
+						$tempValue[$iter]=floatval($ref[$iter])-floatval($tempValue[$iter]);
+						if($tempValue[$iter]<0)
 							$tempValue[$iter]+=360;
-						elseif ($tempValue[$iter]>180) {
-							$tempValue[$iter]-=360;
+						else {
+							$tempValue[$iter]=$tempValue[$iter];
 						}
+						if($tempValue[$iter]>360)
+							$tempValue[$iter]-=360;
 					}
 					$result=implode("\t",$tempValue);
 				//store the result in a file 
 				$result=str_replace(",", "\t", $result);
 				$result=str_replace("\n","",$result);
 				fwrite($fp,($j*5.625)."\t".$result."\n");
-				outputProgress(((2*$i+1)*($j+1))/2 ,4096,2*$i,$j);
+				outputProgress(((2*$i+1)*($j+1))/2 ,64*64,2*$i,$j);
 				}
 				//get sweep time and sleep for that time .
 				//sleep(1);
@@ -419,7 +318,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 						$temp=$temp."0\t";
 					}
 					fwrite($fp,$temp."\n");
-					outputProgress((($i+1)*(63-$j+1))/2 + 4096/2,4096,63-$j,$i);
+					outputProgress((($i+1)*(63-$j+1))/2 + 4096/2,64*64,63-$j,$i);
 				//	//print_r($ref);
 				}
 				else{
@@ -427,14 +326,14 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
 					for($iter=0;$iter<$points;$iter++){
-						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
+						$tempValue[$iter]=floatval($ref[$iter])-floatval($tempValue[$iter]);
 					}
 					$result=implode("\t",$tempValue);
 				//store the result in a file 
 				$result=str_replace(",", "\t", $result);
 				$result=str_replace("\n","",$result);
 				fwrite($fp,(63-$j)*0.5."\t".$result."\n");
-				outputProgress((($i+1)*(63-$j+1))/2 + 4096/2,4096,63-$j,$i);
+				outputProgress((($i+1)*(63-$j+1))/2 + 4096/2,64*64,63-$j,$i);
 				}				
 			}//attenuator loop ends here
 			fclose($fp);
@@ -458,7 +357,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
 		sendSocketCommand("CALC1:FORM PHASe");
 		for($i=0;$i<=31.5;$i=$i+0.5){
-			$filename="Attenuator".(2*$i)."_PhaseShifter_xx.txt";
+			$filename="Attenuator".$i."_PhaseShifter_xx.txt";
 			$fp=fopen($dirName."/".$filename,'a');
 			$delta=($stopFreq-$startFreq)/($points-1);
 			$freqString="";
@@ -493,11 +392,13 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$ref=explode(",",$result);
 					//phase unwrapping
 					for($iter=0;$iter<$points;$iter++){
-						if($ref[$iter]<-180)
+						if($ref[$iter]<0)
 							$ref[$iter]+=360;
-						elseif ($ref[iter]>180) {
-							$ref[$iter]-=360;
+						else {
+							$ref[$iter]=$ref[$iter];
 						}
+						if($ref[$iter]>360)
+							$ref[$iter]-=360;
 					}
 				//	echo $ref;
 					//$ref=array(50,50,50,50,50);
@@ -506,7 +407,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 						$temp=$temp."0\t";
 					}
 					fwrite($fp,$temp."\n");
-					outputProgress(((2*$i+1)*($j+1))/2,4096,2*$i,$j);
+					outputProgress(((2*$i+1)*($j+1))/2,64*64,2*$i,$j);
 				//	//print_r($ref);
 				}
 				else{
@@ -514,19 +415,21 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
 					for($iter=0;$iter<$points;$iter++){
-						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
-						if($tempValue[$iter]<-180)
+						$tempValue[$iter]=floatval($ref[$iter])-floatval($tempValue[$iter]);
+						if($tempValue[$iter]<0)
 							$tempValue[$iter]+=360;
-						elseif ($tempValue[$iter]>180) {
-							$tempValue[$iter]-=360;
+						else {
+							$tempValue[$iter]=$tempValue[$iter];
 						}
+						if($tempValue[$iter]>360)
+							$tempValue[$iter]-=360;
 					}
 					$result=implode("\t",$tempValue);
 				//store the result in a file 
 				$result=str_replace(",", "\t", $result);
 				$result=str_replace("\n","",$result);
 				fwrite($fp,($j*5.625)."\t".$result."\n");
-				outputProgress(((2*$i+1)*($j+1))/2 ,4096,2*$i,$j);
+				outputProgress(((2*$i+1)*($j+1))/2 ,64*64,2*$i,$j);
 				}
 				//get sweep time and sleep for that time .
 				//sleep(1);
@@ -570,7 +473,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 						$temp=$temp."0\t";
 					}
 					fwrite($fp,$temp."\n");
-					outputProgress((($i+1)*(2*$j+1))/2 + 4096/2,4096,2*$j,$i);
+					outputProgress((($i+1)*(2*$j+1))/2 + 4096/2,64*64,2*$j,$i);
 				//	//print_r($ref);
 				}
 				else{
@@ -578,14 +481,14 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
 					for($iter=0;$iter<$points;$iter++){
-						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
+						$tempValue[$iter]=floatval($ref[$iter])-floatval($tempValue[$iter]);
 					}
 					$result=implode("\t",$tempValue);
 				//store the result in a file 
 				$result=str_replace(",", "\t", $result);
 				$result=str_replace("\n","",$result);
 				fwrite($fp,($j)."\t".$result."\n");
-				outputProgress((($i+1)*(2*$j+1))/2 + 4096/2,4096,2*$j,$i);
+				outputProgress((($i+1)*(2*$j+1))/2 + 4096/2,64*64,2*$j,$i);
 				}			
 			}//attenuator loop ends here
 			fclose($fp);
@@ -611,7 +514,7 @@ if(1 || $scpiServerCheckFlag===true  ){
                 sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
 		sendSocketCommand("CALC1:FORM PHASe");
 		for($i=0;$i<=31.5;$i=$i+0.5){
-			$filename="Attenuator".(2*$i)."_PhaseShifter_xx.txt";
+			$filename="Attenuator".$i."_PhaseShifter_xx.txt";
 			$fp=fopen($dirName."/".$filename,'a');
 			$delta=($stopFreq-$startFreq)/($points-1);
 			$freqString="";
@@ -657,11 +560,13 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$ref=explode(",",$result);
 					//phase unwrapping
 					for($iter=0;$iter<$points;$iter++){
-						if($ref[$iter]<-180)
+						if($ref[$iter]<0)
 							$ref[$iter]+=360;
-						elseif ($ref[iter]>180) {
-							$ref[$iter]-=360;
+						else {
+							$ref[$iter]=$ref[$iter];
 						}
+						if($ref[$iter]>360)
+							$ref[$iter]-=360;
 					}
 				//	echo $ref;
 					//$ref=array(50,50,50,50,50);
@@ -670,7 +575,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 						$temp=$temp."0\t";
 					}
 					fwrite($fp,$temp."\n");
-					outputProgress(((2*$i+1)*($j+1))/2,4096,2*$i,$j);
+					outputProgress(((2*$i+1)*($j+1))/2,64*64,2*$i,$j);
 				//	//print_r($ref);
 				}
 				else{
@@ -678,19 +583,21 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
 					for($iter=0;$iter<$points;$iter++){
-						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
-						if($tempValue[$iter]<-180)
+						$tempValue[$iter]=floatval($ref[$iter])-floatval($tempValue[$iter]);
+						if($tempValue[$iter]<0)
 							$tempValue[$iter]+=360;
-						elseif ($tempValue[$iter]>180) {
-							$tempValue[$iter]-=360;
+						else {
+							$tempValue[$iter]=$tempValue[$iter];
 						}
+						if($tempValue[$iter]>360)
+							$tempValue[$iter]-=360;
 					}
 					$result=implode("\t",$tempValue);
 				//store the result in a file 
 				$result=str_replace(",", "\t", $result);
 				$result=str_replace("\n","",$result);
 				fwrite($fp,($j*5.625)."\t".$result."\n");
-				outputProgress(((2*$i+1)*($j+1))/2 ,4096,2*$i,$j);
+				outputProgress(((2*$i+1)*($j+1))/2 ,64*64,2*$i,$j);
 				}
 				//get sweep time and sleep for that time .
 				//sleep(1);
@@ -748,7 +655,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 						$temp=$temp."0\t";
 					}
 					fwrite($fp,$temp."\n");
-					outputProgress((($i+1)*(63-$j+1))/2 + 4096/2,4096,63-$j,$i);
+					outputProgress((($i+1)*(63-$j+1))/2 + 4096/2,64*64,63-$j,$i);
 				//	//print_r($ref);
 				}
 				else{
@@ -756,14 +663,14 @@ if(1 || $scpiServerCheckFlag===true  ){
 					$result=str_replace("\n","",$result); 
 					$tempValue=explode(",",$result);
 					for($iter=0;$iter<$points;$iter++){
-						$tempValue[$iter]=floatval($tempValue[$iter])-floatval($ref[$iter]);
+						$tempValue[$iter]=floatval($ref[$iter])-floatval($tempValue[$iter]);
 					}
 					$result=implode("\t",$tempValue);
 				//store the result in a file 
 				$result=str_replace(",", "\t", $result);
 				$result=str_replace("\n","",$result);
 				fwrite($fp,(63-$j)*0.5."\t".$result."\n");
-				outputProgress((($i+1)*(63-$j+1))/2 + 4096/2,4096,63-$j,$i);
+				outputProgress((($i+1)*(63-$j+1))/2 + 4096/2,64*64,63-$j,$i);
 				}					
 			}//attenuator loop ends here
 		 fclose($fp);
