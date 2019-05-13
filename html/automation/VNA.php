@@ -159,4 +159,5 @@ echo "<script>window.history.go(-1)</script>";
 
 //echo "Configuration done."*/
 socket_close($socket);
+echo "<script>window.history.go(-1)</script>";
 ?>
