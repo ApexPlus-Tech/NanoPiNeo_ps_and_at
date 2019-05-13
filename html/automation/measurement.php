@@ -55,7 +55,7 @@ function sendandReceiveSocket($cmdString,&$result){
 	socket_write($socket, $command, strlen($command)) or die("Could not send data to server\n");
 	//$result="";
 	//$result=socket_read($socket,1024);
-	socket_recv($socket, $result,1024,MSG_WAITALL);
+	socket_recv($socket, $result,2048,MSG_WAITALL);
 	//socket_recv($socket,$result,1024,MSG_DONTWAIT);
 	//socket_recv($socket,$result,1024,MSG_OOB);
 	//socket_recv($socket,$result,1024,MSG_WAITALL|MSG_DONTWAIT);
@@ -73,7 +73,7 @@ function sendandReceiveSocket1($cmdString,&$result){
         //it has sent the command to SCPI server
         socket_write($socket, $command, strlen($command)) or die("Could not send data to server\n");
         //$result="";
-        socket_recv($socket, $result,1024,MSG_WAITALL);
+        socket_recv($socket, $result,2048,MSG_WAITALL);
        // socket_recv($socket,$result,1024,MSG_DONTWAIT);
         //socket_recv($socket,$result,1024,MSG_OOB);
         //socket_recv($socket,$result,1024,MSG_WAITALL|MSG_DONTWAIT);
