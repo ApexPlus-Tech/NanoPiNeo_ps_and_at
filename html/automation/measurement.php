@@ -55,7 +55,7 @@ function sendandReceiveSocket($cmdString,&$result){
 	socket_write($socket, $command, strlen($command)) or die("Could not send data to server\n");
 	//$result="";
 	//$result=socket_read($socket,1024);
-	socket_recv($socket, $result,2048,MSG_WAITALL);
+	socket_recv($socket, $result,2048,MSG_DONTWAIT);
 	//socket_recv($socket,$result,1024,MSG_DONTWAIT);
 	//socket_recv($socket,$result,1024,MSG_OOB);
 	//socket_recv($socket,$result,1024,MSG_WAITALL|MSG_DONTWAIT);
@@ -175,15 +175,21 @@ if(1 || $scpiServerCheckFlag===true  ){
 		        
 		        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
 		        sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
+		        usleep(500);
 				sendSocketCommand("CALC1:FORM PHASe");
+				usleep(500);
 				sendandReceiveSocket("CALCulate1:DATA? FDATA",$result);
+				usleep(1000);
 				$result=str_replace("\n","",$result);
 				fwrite($fp,$j."\t".$result."\n");
 				//sendSocketCommand("INITiate1;*OPC?") ;
 
 				sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Amp'");
+				usleep(500);
 				sendSocketCommand("CALC1:FORM MLOG");
+				usleep(500);
 				sendandReceiveSocket("CALCulate1:DATA? FDATA",$result);
+				usleep(1000);
 				//strip /n 
 				$result=str_replace("\n","",$result);
 				fwrite($fp,"\t".$result."\n");
@@ -231,15 +237,21 @@ if(1 || $scpiServerCheckFlag===true  ){
 		        
 		        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
 		        sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
+		        usleep(500);
 				sendSocketCommand("CALC1:FORM PHASe");
+				usleep(500);
 				sendandReceiveSocket("CALCulate1:DATA? FDATA",$result);
+				usleep(1000);
 				$result=str_replace("\n","",$result);
 				fwrite($fp,$j."\t".$result."\n");
 				//sendSocketCommand("INITiate1;*OPC?") ;
 
 				sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Amp'");
+				usleep(500);
 				sendSocketCommand("CALC1:FORM MLOG");
+				usleep(500);
 				sendandReceiveSocket("CALCulate1:DATA? FDATA",$result);
+				usleep(1000);
 				//strip /n 
 				$result=str_replace("\n","",$result);
 				fwrite($fp,"\t".$result."\n");
@@ -289,15 +301,21 @@ if(1 || $scpiServerCheckFlag===true  ){
 		        
 		        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
 		        sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
+		        usleep(500);
 				sendSocketCommand("CALC1:FORM PHASe");
+				usleep(500);
 				sendandReceiveSocket("CALCulate1:DATA? FDATA",$result);
+				usleep(1000);
 				$result=str_replace("\n","",$result);
 				fwrite($fp,$j."\t".$result."\n");
 				//sendSocketCommand("INITiate1;*OPC?") ;
 
 				sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Amp'");
+				usleep(500);
 				sendSocketCommand("CALC1:FORM MLOG");
+				usleep(500);
 				sendandReceiveSocket("CALCulate1:DATA? FDATA",$result);
+				usleep(1000);
 				//strip /n 
 				$result=str_replace("\n","",$result);
 				fwrite($fp,"\t".$result."\n");
@@ -319,9 +337,6 @@ if(1 || $scpiServerCheckFlag===true  ){
                 //sendSocketCommand("SENS1:SWE:POINts 5");
 		//sendSocketCommand("OUTP ON");
 		sleep($warmUp);
-		
-		sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Amp'");
-		sendSocketCommand("CALC1:FORM MLOG");
 		for($i=0;$i<64;$i++){
 			$filename="Phase".$i.".txt";
 			$fp=fopen($dirName."/".$filename,'a');
@@ -348,15 +363,21 @@ if(1 || $scpiServerCheckFlag===true  ){
 		        
 		        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
 		        sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
+		        usleep(500);
 				sendSocketCommand("CALC1:FORM PHASe");
+				usleep(500);
 				sendandReceiveSocket("CALCulate1:DATA? FDATA",$result);
+				usleep(1000);
 				$result=str_replace("\n","",$result);
 				fwrite($fp,$j."\t".$result."\n");
 				//sendSocketCommand("INITiate1;*OPC?") ;
 
 				sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Amp'");
+				usleep(500);
 				sendSocketCommand("CALC1:FORM MLOG");
+				usleep(500);
 				sendandReceiveSocket("CALCulate1:DATA? FDATA",$result);
+				usleep(1000);
 				//strip /n 
 				$result=str_replace("\n","",$result);
 				fwrite($fp,"\t".$result."\n");
