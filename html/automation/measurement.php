@@ -55,7 +55,7 @@ function sendandReceiveSocket($cmdString,&$result){
 	socket_write($socket, $command, strlen($command)) or die("Could not send data to server\n");
 	//$result="";
 	//$result=socket_read($socket,1024);
-	socket_recv($socket, $result,2048,MSG_DONTWAIT);
+	socket_recv($socket, $result,3200,MSG_WAIT_ALL);
 	//socket_recv($socket,$result,1024,MSG_DONTWAIT);
 	//socket_recv($socket,$result,1024,MSG_OOB);
 	//socket_recv($socket,$result,1024,MSG_WAITALL|MSG_DONTWAIT);
@@ -149,7 +149,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		//sendSocketCommand("SENS1:PULS1 1");
 		sendSocketCommand("sense1:correction:cset:activate 'Tx_Ecal_Pulse',1");
 		sleep($warmUp);
-		for($i=0;$i<64;$i++){
+		for($i=0;$i<1;$i++){
 			$filename="Phase".$i.".txt";
 			$fp=fopen($dirName."/".$filename,'a');
 			$delta=($stopFreq-$startFreq)/($points-1);
@@ -195,7 +195,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				fwrite($fp,"\t".$result."\n");
 
 
-				outputProgress((($i+1)*(2*$j+1)),4096,2*$j,$i);
+				outputProgress((($i+1)*(2*$j+1)),64,2*$j,$i);
 				}
 				fclose($fp);
 			}//Phase shifter for loop ends here 
@@ -211,7 +211,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		//sendSocketCommand("OUTP ON");
 		sendSocketCommand("sense1:correction:cset:activate 'Rx_Ecal_Pulse',1");
 		sleep($warmUp);
-		for($i=0;$i<64;$i++){
+		for($i=0;$i<1;$i++){
 			$filename="Phase".$i.".txt";
 			$fp=fopen($dirName."/".$filename,'a');
 			$delta=($stopFreq-$startFreq)/($points-1);
@@ -257,7 +257,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				fwrite($fp,"\t".$result."\n");
 
 
-				outputProgress((($i+1)*(2*$j+1)),4096,2*$j,$i);
+				outputProgress((($i+1)*(2*$j+1)),64,2*$j,$i);
 				}
 				fclose($fp);
 			}//Phase shifter for loop ends here 
@@ -275,7 +275,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		sendSocketCommand("sense1:correction:cset:activate 'Tx_Ecal_Pulse',1");
 		sleep($warmUp);
 		
-		for($i=0;$i<64;$i++){
+		for($i=0;$i<1;$i++){
 			$filename="Phase".$i.".txt";
 			$fp=fopen($dirName."/".$filename,'a');
 			$delta=($stopFreq-$startFreq)/($points-1);
@@ -321,7 +321,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				fwrite($fp,"\t".$result."\n");
 
 
-				outputProgress((($i+1)*(2*$j+1)),4096,2*$j,$i);
+				outputProgress((($i+1)*(2*$j+1)),64,2*$j,$i);
 				}
 				fclose($fp);
 			}//Phase shifter for loop ends here 
@@ -337,7 +337,7 @@ if(1 || $scpiServerCheckFlag===true  ){
                 //sendSocketCommand("SENS1:SWE:POINts 5");
 		//sendSocketCommand("OUTP ON");
 		sleep($warmUp);
-		for($i=0;$i<64;$i++){
+		for($i=0;$i<1;$i++){
 			$filename="Phase".$i.".txt";
 			$fp=fopen($dirName."/".$filename,'a');
 			$delta=($stopFreq-$startFreq)/($points-1);
@@ -383,7 +383,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				fwrite($fp,"\t".$result."\n");
 
 
-				outputProgress((($i+1)*(2*$j+1)),4096,2*$j,$i);
+				outputProgress((($i+1)*(2*$j+1)),64,2*$j,$i);
 				}
 				fclose($fp);
 			}//Phase shifter for loop ends here 
