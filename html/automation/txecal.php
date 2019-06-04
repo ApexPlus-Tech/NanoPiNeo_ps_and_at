@@ -21,7 +21,7 @@ if (empty($host) ){ //if the string is empty i.e. session has expired
 	$pulsewidth=str_replace(array("\n","\r"),'', $fileArray[6]);
 	$dutycycle=str_replace(array("\n","\r"),'', $fileArray[7]);
 }
-echo "Host:".$host.";startFreq:".$startFreq.";stopFreq:".$stopFreq.";points:".$points."pulsewidth:".$pulsewidth.";dutycycle:".$dutycycle.";txpowerlevel:".$txpowerlevel;
+//echo "Host:".$host.";startFreq:".$startFreq.";stopFreq:".$stopFreq.";points:".$points."pulsewidth:".$pulsewidth.";dutycycle:".$dutycycle.";txpowerlevel:".$txpowerlevel;
 session_write_close();
 //function definition
 function sendSocketCommand($cmdString){
