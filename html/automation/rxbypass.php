@@ -14,7 +14,7 @@ if (empty($host) ){ //if the string is empty i.e. session has expired
 	$points=str_replace(array("\n","\r"),'', $fileArray[3]);
 }
 session_write_close();
-echo "Host:".$host.";startFreq:".$startFreq.";stopFreq:".$stopFreq.".points:".$points;
+//echo "Host:".$host.";startFreq:".$startFreq.";stopFreq:".$stopFreq.".points:".$points;
 //function definition
 function sendSocketCommand($cmdString){
 	$socket=$GLOBALS['socket'];
