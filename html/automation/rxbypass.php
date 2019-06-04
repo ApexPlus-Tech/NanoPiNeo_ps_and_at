@@ -4,6 +4,7 @@ session_start();
 $host=$_SESSION['ipAddr'];
 $startFreq=$_SESSION['startFreq'];
 $stopFreq=$_SESSION['stopFreq'];
+$points=$_SESSION['points'];
 $value=$_SESSION['value'];
 if (empty($host) ){ //if the string is empty i.e. session has expired
 	$fileArray=file("/var/www/automation/basic_session_ecal.txt") or die("Could not open basic session file.");

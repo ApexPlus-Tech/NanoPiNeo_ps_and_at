@@ -15,11 +15,11 @@ if (empty($host) ){ //if the string is empty i.e. session has expired
 	$startFreq=str_replace(array("\n","\r"),'', $fileArray[1]);
 	$stopFreq=str_replace(array("\n","\r"),'', $fileArray[2]);
 	$points=str_replace(array("\n","\r"),'', $fileArray[3]);
-	$value=str_replace(array("\n","\r"),'', $fileArray[4]);
-	$txpowerlevel=str_replace(array("\n","\r"),'', $fileArray[5]);
-	$rxpowerlevel=str_replace(array("\n","\r"),'', $fileArray[6]);
-	$pulsewidth=str_replace(array("\n","\r"),'', $fileArray[7]);
-	$dutycycle=str_replace(array("\n","\r"),'', $fileArray[8]);
+	//$value=str_replace(array("\n","\r"),'', $fileArray[4]);
+	$txpowerlevel=str_replace(array("\n","\r"),'', $fileArray[4]);
+	$rxpowerlevel=str_replace(array("\n","\r"),'', $fileArray[5]);
+	$pulsewidth=str_replace(array("\n","\r"),'', $fileArray[6]);
+	$dutycycle=str_replace(array("\n","\r"),'', $fileArray[7]);
 }
 echo "Host:".$host.";startFreq:".$startFreq.";stopFreq:".$stopFreq.";points:".$points."pulsewidth:".$pulsewidth.";dutycycle:".$dutycycle.";txpowerlevel:".$txpowerlevel;
 session_write_close();
