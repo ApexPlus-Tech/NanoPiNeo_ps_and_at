@@ -110,7 +110,7 @@ sendSocketCommand("SENS:CORR:COLL:CKIT:INF? ECAL1,CHAR0");
 socket_close($socket);
 // //alert ,how to do it in php ?
 echo "<script>alert('Please connect ECAL kit with attenuator to continue')</script>";
-//echo "<script>window.location='/automation/txbypass.php'</script>";
+echo "<script>window.location='/automation/txbypass.php'</script>";
 // sendSocketCommand("SENS:CORR:COLL:METH SPARSOLT");
 // sendSocketCommand("SENS:CORR:PREF:ECAL:ORI ON");
 // sendSocketCommand("SENS:CORR:COLL:ACQ ECAL1,CHAR0;*OPC?")
