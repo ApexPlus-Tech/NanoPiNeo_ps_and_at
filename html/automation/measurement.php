@@ -1,14 +1,11 @@
 <?php
-set_time_limit(0); 
-ignore_user_abort(true);
 ini_set('max_execution_time', 0);
-ini_set('session.gc_maxlifetime', 14400);
-session_start();
 $host=$_SESSION['ipAddr'];
 $startFreq=$_SESSION['startFreq'];
 $stopFreq=$_SESSION['stopFreq'];
 $points=$_SESSION['points'];
 $_SESSION['folder']=$_POST['folder'];
+session_write_close();
 if (empty($host) ){ //if the string is empty i.e. session has expired
 	$fileArray=file("/var/www/automation/basic_session.txt") or die("Could not open basic session file.");
 	$host=str_replace(array("\n","\r"),'', $fileArray[0]);
@@ -55,31 +52,14 @@ function sendandReceiveSocket($cmdString,&$result){
 	socket_write($socket, $command, strlen($command)) or die("Could not send data to server\n");
 	//$result="";
 	//$result=socket_read($socket,1024);
-	socket_recv($socket, $result,3200,MSG_WAIT_ALL);
+	socket_recv($socket, $result,4096,MSG_WAITALL);
 	//socket_recv($socket,$result,1024,MSG_DONTWAIT);
 	//socket_recv($socket,$result,1024,MSG_OOB);
 	//socket_recv($socket,$result,1024,MSG_WAITALL|MSG_DONTWAIT);
 	//$result=socket_read($socket,1024);
 			
 }
-function sendandReceiveSocket1($cmdString,&$result){
-        $socket=$GLOBALS['socket'];
-        $command=$cmdString;   //This command  variable has got value from $_POST variable which has been passed from gui page by user
-        //$directory=$_POST['folder'];
-        //$command="*IDN?";
-    $command="$command"."\n";      //concatenating the command with newline character
-        //
-        //Edit these lines
-        //it has sent the command to SCPI server
-        socket_write($socket, $command, strlen($command))  or die("Could not send data to server\n");
-        //$result="";
-        socket_recv($socket, $result,2048,MSG_WAITALL);
-       // socket_recv($socket,$result,1024,MSG_DONTWAIT);
-        //socket_recv($socket,$result,1024,MSG_OOB);
-        //socket_recv($socket,$result,1024,MSG_WAITALL|MSG_DONTWAIT);
-        //$result=socket_read($socket,1024);
 
-}
 
 
 function sendSocketCommand($cmdString){

@@ -5,6 +5,15 @@ $host=$_SESSION['ipAddr'];
 $startFreq=$_SESSION['startFreq'];
 $stopFreq=$_SESSION['stopFreq'];
 $value=$_SESSION['value'];
+if (empty($host) ){ //if the string is empty i.e. session has expired
+	$fileArray=file("/var/www/automation/basic_session_ecal.txt") or die("Could not open basic session file.");
+	$host=str_replace(array("\n","\r"),'', $fileArray[0]);
+	$startFreq=str_replace(array("\n","\r"),'', $fileArray[1]);
+	$stopFreq=str_replace(array("\n","\r"),'', $fileArray[2]);
+	$points=str_replace(array("\n","\r"),'', $fileArray[3]);
+}
+session_write_close();
+echo "Host:".$host.";startFreq:".$startFreq.";stopFreq:".$stopFreq.".points:".$points;
 //function definition
 function sendSocketCommand($cmdString){
 	$socket=$GLOBALS['socket'];
@@ -73,7 +82,7 @@ $result = socket_connect($socket, $host, $port) or die("Could not connect to ser
 
 //sendSocketCommand("SENSe2:FREQ:STOP ".$stopFreq);
 echo "<script>alert('ECAL calibration2 done . Connect DUT')</script>";
-echo "<script>window.history.go(-1)</script>";
+//echo "<script>window.history.go(-1)</script>";
 socket_close($socket);
 //echo "<script>window.location='ecal.html'</script>";
 //echo "Configuration done."

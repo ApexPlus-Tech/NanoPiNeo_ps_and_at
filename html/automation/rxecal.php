@@ -1,9 +1,5 @@
 <?php
-session_start();
-set_time_limit(0); 
-ignore_user_abort(true);
-ini_set('max_execution_time', 0);
-ini_set('session.gc_maxlifetime', 14400);
+set_time_limit(300);
 session_start();
 $host=$_POST['ipAddr'];
 $_SESSION['ipAddr']=$_POST['ipAddr'];
@@ -15,14 +11,20 @@ $_SESSION['rxpowerlevel']=$_POST['rxpowerlevel'];
 $_SESSION['pulsewidth']=$_POST['pulsewidth'];
 $_SESSION['dutycycle']=$_POST['dutycycle'];
 $_SESSION['points']=$_POST['points'];
-$sessionFile=fopen("/var/www/automation/basic_session.txt",'w') or die("Could not open basic session file");
+$sessionFile=fopen("/var/www/automation/basic_session_ecal.txt",'w') or die("Could not open basic session file");
 fwrite($sessionFile,$_POST['ipAddr']."\n");
 fwrite($sessionFile,$_POST['startFreq']."\n");
 fwrite($sessionFile,$_POST['stopFreq']."\n");
 fwrite($sessionFile,$_POST['points']."\n");
+fwrite($sessionFile,$_POST['value']."\n");
+fwrite($sessionFile,$_POST['txpowerlevel']."\n");
+fwrite($sessionFile,$_POST['rxpowerlevel']."\n");
+fwrite($sessionFile,$_POST['pulsewidth']."\n");
+fwrite($sessionFile,$_POST['dutycycle']."\n");
 fclose($sessionFile);
 $startFreq=$_POST['startFreq'];
 $stopFreq=$_POST['stopFreq'];
+session_write_close();
 
 //function definition
 function sendSocketCommand($cmdString){
@@ -68,20 +70,20 @@ sendSocketCommand("CALC1:FORM PHASe");
 sendSocketCommand("SENSe1:FREQuency:STARt " .$startFreq);
 //sleep(1);
 sendSocketCommand("SENSe1:FREQuency:STOP ".$stopFreq);
-$points=$_SESSION['points'];
+$points=$_POST['points'];
 sendSocketCommand("SENSe1:SWEep:POINts ".$points);
 
 //Enable Pulse Mode
 sendSocketCommand("SENS:SWE:PULS:MODE OFF");
-$pulsewidth=$_SESSION['pulsewidth'];
-$dutycycle=$_SESSION['dutycycle'];
+$pulsewidth=$_POST['pulsewidth'];
+$dutycycle=$_POST['dutycycle'];
 		//echo $dutycycle;
 //sendSocketCommand("SENS1:PULS:WIDT ".$pulsewidth);
 $pulsePeriod=floatval($pulsewidth)/floatval($dutycycle);
 		//echo ($pulsewidth);
 //sendSocketCommand("SENS1:PULS:PER ".$pulsePeriod);
 
-$value=$_SESSION['rxpowerlevel'];
+$value=$_POST['rxpowerlevel'];
 sendSocketCommand("SOUR1:POW ".$value);
 
 

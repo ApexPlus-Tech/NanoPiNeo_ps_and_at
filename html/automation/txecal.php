@@ -1,12 +1,28 @@
 <?php
-set_time_limit(0); 
-ignore_user_abort(true);
-ini_set('max_execution_time', 0);
-ini_set('session.gc_maxlifetime', 14400);
+set_time_limit(300); 
 session_start();
 $host=$_SESSION['ipAddr'];
 $startFreq=$_SESSION['startFreq'];
 $stopFreq=$_SESSION['stopFreq'];
+
+$pulsewidth=$_SESSION['pulsewidth'];
+$dutycycle=$_SESSION['dutycycle'];
+$points=$_SESSION['points'];
+$txpowerlevel=$_SESSION['txpowerlevel'];
+if (empty($host) ){ //if the string is empty i.e. session has expired
+	$fileArray=file("/var/www/automation/basic_session_ecal.txt") or die("Could not open basic session file.");
+	$host=str_replace(array("\n","\r"),'', $fileArray[0]);
+	$startFreq=str_replace(array("\n","\r"),'', $fileArray[1]);
+	$stopFreq=str_replace(array("\n","\r"),'', $fileArray[2]);
+	$points=str_replace(array("\n","\r"),'', $fileArray[3]);
+	$value=str_replace(array("\n","\r"),'', $fileArray[4]);
+	$txpowerlevel=str_replace(array("\n","\r"),'', $fileArray[5]);
+	$rxpowerlevel=str_replace(array("\n","\r"),'', $fileArray[6]);
+	$pulsewidth=str_replace(array("\n","\r"),'', $fileArray[7]);
+	$dutycycle=str_replace(array("\n","\r"),'', $fileArray[8]);
+}
+echo "Host:".$host.";startFreq:".$startFreq.";stopFreq:".$stopFreq.";points:".$points."pulsewidth:".$pulsewidth.";dutycycle:".$dutycycle.";txpowerlevel:".$txpowerlevel;
+session_write_close();
 //function definition
 function sendSocketCommand($cmdString){
 	$socket=$GLOBALS['socket'];
@@ -53,7 +69,6 @@ sendSocketCommand("CALC1:FORM PHASe");
 sendSocketCommand("SENSe1:FREQuency:STARt " .$startFreq);
 //sleep(1);
 sendSocketCommand("SENSe1:FREQuency:STOP ".$stopFreq);
-$points=$_SESSION['points'];
 sendSocketCommand("SENSe1:SWEep:POINts ".$points);
 
 /*
@@ -73,16 +88,12 @@ sendSocketCommand("SOUR1:POW ".$value);
 
 
 
-$pulsewidth=$_SESSION['pulsewidth'];
-$dutycycle=$_SESSION['dutycycle'];
                 //echo $dutycycle;
 sendSocketCommand("SENS1:PULS:WIDT ".$pulsewidth);
 $pulsePeriod=floatval($pulsewidth)/floatval($dutycycle);
                 //echo ($pulsewidth);
 sendSocketCommand("SENS1:PULS:PER ".$pulsePeriod);
-
-$value=$_SESSION['txpowerlevel'];
-sendSocketCommand("SOUR1:POW ".$value);
+sendSocketCommand("SOUR1:POW ".$txpowerlevel);
 
 
 sendSocketCommand("sens:path:conf:elem 'PulseModDrive','Pulse1'");
@@ -99,7 +110,7 @@ sendSocketCommand("SENS:CORR:COLL:CKIT:INF? ECAL1,CHAR0");
 socket_close($socket);
 // //alert ,how to do it in php ?
 echo "<script>alert('Please connect ECAL kit with attenuator to continue')</script>";
-echo "<script>window.location='/automation/txbypass.php'</script>";
+//echo "<script>window.location='/automation/txbypass.php'</script>";
 // sendSocketCommand("SENS:CORR:COLL:METH SPARSOLT");
 // sendSocketCommand("SENS:CORR:PREF:ECAL:ORI ON");
 // sendSocketCommand("SENS:CORR:COLL:ACQ ECAL1,CHAR0;*OPC?")
