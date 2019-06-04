@@ -15,8 +15,8 @@ $sessionFile=fopen("/var/www/automation/basic_session_ecal.txt",'w') or die("Cou
 fwrite($sessionFile,$_POST['ipAddr']."\n");
 fwrite($sessionFile,$_POST['startFreq']."\n");
 fwrite($sessionFile,$_POST['stopFreq']."\n");
-//fwrite($sessionFile,$_POST['points']."\n");
-fwrite($sessionFile,$_POST['value']."\n");
+fwrite($sessionFile,$_POST['points']."\n");
+//fwrite($sessionFile,$_POST['value']."\n");
 fwrite($sessionFile,$_POST['txpowerlevel']."\n");
 fwrite($sessionFile,$_POST['rxpowerlevel']."\n");
 fwrite($sessionFile,$_POST['pulsewidth']."\n");
