@@ -82,8 +82,8 @@
 	</form>
 </div>
 <div class="col-sm-12">
-	<form action="restart.php" method="POST" target="hole" >
-	<input type="submit" name="restart" value="RESTART" class="btn btn-primary" id="restart">
+	<form action="restart.php" method="POST" onsubmit='confirm("Do you wish to restart?")' target="hole" >
+	<input type="submit" name="update" value="RESTART" class="btn btn-primary" id="restart">
 	</form>
 </div>
 
@@ -733,7 +733,7 @@ dB
 </form>
 <div class="footer1">
 	<strong>ApexPlus Technologies</strong>
-	<br>Software Version 2.6
+	<br>Software Version 3.3
 </div>
 </body></html>
 <!-- last line -->

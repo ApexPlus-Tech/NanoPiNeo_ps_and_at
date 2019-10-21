@@ -1,0 +1,73 @@
+<html>
+<head>
+	<style type="text/css">
+ 		.footer1{
+		position:fixed;
+		text-align:right;
+		bottom:0px;
+		width:100%;
+		/*color:red*/
+		}
+		.footer2{
+		position:fixed
+		text-align:left;
+		bottom:0px;
+		width:100%
+		}
+		.mycolor{
+			background-color:orange;
+		}
+	</style>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+	$(document).ready(function(){
+			$("#folder").keyup(function(){
+				//console.log("typed");
+			$("#board1").val($(this).val())
+			});
+			});
+</script>
+</head>
+<form method="POST" action="VNA.php">
+	<p>IP address 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<input type="text" id="ipAddr" name="ipAddr"></p>
+	<p>Start Freq 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<input type="text" id="startFreq" name="startFreq"> Hz</p>
+	<p>Stop  Freq 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<input type="text" id="stopFreq" name="stopFreq"> Hz<br/></p>
+	<p>Number of points :<input type="text" id="points" name="points"><br/></p>
+	<button type="submit">Apply</button>
+</form>
+
+<br/>
+<br/>
+<br/>
+<form method="POST" action="measurement2.php" >
+<input type="radio" name="channel" value="CH1_TX" required>Ch 1 TX<br/>
+<input type="radio" name="channel" value="CH2_TX">Ch 2 TX<br/>
+<input type="radio" name="channel" value="CH1_RX">Ch 1 RX<br/>
+<input type="radio" name="channel" value="CH2_RX">Ch 2 RX<br/>
+<br/>
+<br/>
+<p>Warmup time:<input type="text" id="warmUp" name="warmUp" required> sec</p>
+<p>Board name&nbsp;&nbsp;:<input type="text" id="folder" name="folder" required><br/></p>
+<button id="runMeasurement" type="submit" class="btn btn-info">Run measurement</button>
+<br/>
+</form>
+<br/>
+<br/>
+<br/>
+<br/>
+<form method="POST" action="validate.php" target="hole">
+	<p>IP address 		:<input type="text" id="ipAddr2" name="ipAddr"></p>
+	<p><button type="submit">Validate</button></p>
+	<p><iframe name="hole" width="400" height="400"></iframe></p>
+</form>
+<!-- File is downloaded automatically -->
+<!-- <form method="post" action="zip.php"> -->
+			<!-- <p>Board name:<input type="text" name="folder" placeholder="Board1" id="board1" /></p> -->
+			<!-- <p><input type="submit" value="Download zip file" target="hole"></p> -->
+<!-- </form> -->
+<div class="footer1">
+	<strong>ApexPlus Technologies</strong>
+	<br>Software Version 3.3
+</div>
+</html>	

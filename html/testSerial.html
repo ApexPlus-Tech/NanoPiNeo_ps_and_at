@@ -1,0 +1,102 @@
+<html>
+	<head>
+		<script src="./js/jquery.min.js"></script>
+	</head>
+	<body>
+		<!-- <label for="delta">TIME DURATION:</label><input type="text" id="delta" value="5"></input> sec
+		<br/>
+		<button id="start">START</button>
+		<br/> -->
+		<button id="clear" onclick="clearLog();">CLEAR LOG</button>
+		<br/>
+		<strong>OUTPUT</strong>
+		<pre>
+			<div id="log" style="overflow-y:scroll;height:200px;width:500px">
+			</div>
+		</pre>
+		<strong>ERROR LOG</strong>
+		<pre>
+			<div id="error_log" style="overflow-y:scroll;height:200px;width:500px">
+                        </div>
+		</pre>
+
+	</body>
+	<script type="text/javascript">
+	window.onload = pageLoad;
+	delta=5+1;                                             //include 1 sec tolerance for browser's speed
+	updateInterval=setInterval(updateLog,5000);
+	setInterval(function(){
+	 var log_div=document.getElementById("log");
+         var error_div=document.getElementById("error_log");
+         log_div.scrollTop=log_div.scrollHeight;
+         error_div.scrollTop=error_div.scrollHeight;},
+	1000);
+	
+	refDate = new Date();
+
+	function pageLoad(){
+	console.log("page loaded");
+	 var startButton = document.getElementById("start");
+	startButton.onclick = changeDelta;
+	}
+	
+	function onsuccess(response) {
+       		console.log(response);
+    	}
+
+    	function onerror(jhxr, status, exception) {
+        	console.log("post failure");
+   	 	}
+
+	    function sendJSON(urlName, JSONObject, successFunction, errorFunction) {
+	       // console.log("sendJSON called");
+	        $.ajax({
+	            url: urlName,
+	            contentType: 'application/json',
+	            data: JSON.stringify(JSONObject),
+	            type: 'POST',
+	            success: successFunction,
+	            error: errorFunction,
+	        });
+	    }
+
+	    function updateLog(){
+	    	JSONobj={}
+		//console.log("Log being updated");
+	    	sendJSON("/testSerial.php",JSONobj,function (response){
+	    		if(response == 'Y\n'){
+	    			var d = new Date();
+				var diff = (d-refDate)/1000;
+				var output = "\nTEST---"+('0'+d.getDate()).slice(-2)+"/"+('0'+(d.getMonth()+1)).slice(-2)+"/"+d.getFullYear()+"   "+('0'+d.getHours()).slice(-2)+":"+('0'+d.getMinutes()).slice(-2)+":"+('0'+d.getSeconds()).slice(-2)+",DELTA="+Math.round(diff)+" seconds\n";
+				if(diff > delta){
+					var obj = {'type':"append",'data':output};
+					sendJSON("/saveSerial.php",obj,onsuccess,onerror);
+					output = "<font color='red'>"+output+"</font>";
+					$("#error_log").append(output);
+				}
+	    			$("#log").append(output);
+				refDate = d;
+	    		}
+	    	}
+	    	,onerror)
+	    }
+		
+            function changeDelta(){
+		delta = parseInt($('#delta').val()) + 1;
+		if(delta < 0){
+			alert("Delta cannot be negative");
+			return ;
+		}
+		console.log("Changing delta");
+		clearInterval(updateInterval);
+		updateInterval=setInterval(updateLog,(delta-1)*1000);
+	    }
+
+	   function clearLog(){
+		var JSONobj={'type':"clear"};
+		sendJSON("/saveSerial.php",JSONobj,onsuccess,onerror);
+		$("#log").empty();
+		$("#error_log").empty();
+           } 
+	</script>
+</html>

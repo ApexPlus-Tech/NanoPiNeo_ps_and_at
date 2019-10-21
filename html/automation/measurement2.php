@@ -191,7 +191,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		//sendSocketCommand("OUTP ON");
 		sendSocketCommand("sense1:correction:cset:activate 'Rx_Ecal_Pulse',1");
 		sleep($warmUp);
-		for($i=0;$i<64;$i++){
+		for($i=0;$i<4;$i++){
 			$filename="Phase".$i.".txt";
 			$fp=fopen($dirName."/".$filename,'a');
 			$delta=($stopFreq-$startFreq)/($points-1);
@@ -207,7 +207,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 			$data=dechex($val);
 			$data="W ".$data." 23\r";
 			exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-			for($j=0;$j<=31.5;$j=$j+0.5){
+			for($j=0;$j<=1.5;$j=$j+0.5){
 			//set attenuator value 
 				$val=$j;
 				$val=($val-31.5)*-2;
@@ -239,7 +239,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				fwrite($fp,"\t".$result."\n");
 
 
-				outputProgress((($i+1)*(2*$j+1)),64*64,2*$j,$i);
+				outputProgress((($i+1)*(2*$j+1)),4*4,2*$j,$i);
 				}
 				fclose($fp);
 			}//Phase shifter for loop ends here 
@@ -319,7 +319,7 @@ if(1 || $scpiServerCheckFlag===true  ){
                 //sendSocketCommand("SENS1:SWE:POINts 5");
 		//sendSocketCommand("OUTP ON");
 		sleep($warmUp);
-		for($i=0;$i<1;$i++){
+		for($i=0;$i<4;$i++){
 			$filename="Phase".$i.".txt";
 			$fp=fopen($dirName."/".$filename,'a');
 			$delta=($stopFreq-$startFreq)/($points-1);
@@ -335,7 +335,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 			$data=dechex($val);
 			$data="W ".$data." 25\r";
 			exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
-			for($j=0;$j<=31.5;$j=$j+0.5){
+			for($j=0;$j<=1.5;$j=$j+0.5){
 			//set attenuator value 
 				$val=$j;
 				$val=($val-31.5)*-2;
@@ -345,33 +345,28 @@ if(1 || $scpiServerCheckFlag===true  ){
 		        
 		        exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
 		        sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
-		        usleep(500);
 				sendSocketCommand("CALC1:FORM PHASe");
-				usleep(500);
 				sendandReceiveSocket("CALCulate1:DATA? FDATA",$result);
-				usleep(1000);
 				$result=str_replace("\n","",$result);
+				$result=str_replace(",","\t",$result);
 				fwrite($fp,$j."\t".$result."\n");
 				//sendSocketCommand("INITiate1;*OPC?") ;
 
 				sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Amp'");
-				usleep(500);
 				sendSocketCommand("CALC1:FORM MLOG");
-				usleep(500);
 				sendandReceiveSocket("CALCulate1:DATA? FDATA",$result);
-				usleep(1000);
 				//strip /n 
 				$result=str_replace("\n","",$result);
+				$result=str_replace(",","\t",$result);
 				fwrite($fp,"\t".$result."\n");
-
-
-				outputProgress((($i+1)*(2*$j+1)),64,2*$j,$i);
+				
+				outputProgress((($i+1)*(2*$j+1)),4*4,2*$j,$i);
 				}
 				fclose($fp);
 			}//Phase shifter for loop ends here 
 	}
 	socket_close($socket);
-	echo("<script>window.location='/automation/zip.php'</script>");
+	echo("<script>window.location='/automation/zip2.php'</script>");
  }
 }
 else{

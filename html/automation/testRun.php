@@ -304,6 +304,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		//sendSocketCommand("SENS:SWE:PULS:MODE OFF");//turn OFF the pulse		        	
 	}
 	elseif ($channelFunction=="CH1_RX"){
+		$fileLogger=fopen("logger.txt","w");
 		//set TX mode 
 		$data="W CD 21\r";
 		exec('/usr/bin/python /home/pi/sendSerialData.py "'.$data.'"');
@@ -315,6 +316,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 		sleep($warmUp);
 		sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
 		sendSocketCommand("CALC1:FORM PHASe");
+		//die("Killed");
 		for($i=0;$i<0.5;$i=$i+0.5){
 			$filename="Attenuator".$i."_PhaseShifter_xx.txt";
 			$fp=fopen($dirName."/".$filename,'a');
@@ -343,11 +345,22 @@ if(1 || $scpiServerCheckFlag===true  ){
 				//echo $filename;
 				$result="";
 				//sendSocketCommand("INITiate2;*OPC?") ;
+				if($j == 0){
+					for($myIter=0;$myIter<3;$myIter++){
+						sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
+                                		sendandReceiveSocket("CALCulate1:DATA? FDATA",$result);
+					}
+				}
 				sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
 				sendandReceiveSocket("CALCulate1:DATA? FDATA",$result);
+				fwrite($fileLogger,$result);	
+				//outputProgress(((2*$i+1)*($j+1))/2 ,1*64,2*$i,$j);
 				//store the result in a file 
-				 if($j==0){
+				if($j==0){
 					//store the first value as reference
+					$referenceString=$result;
+					$referenceString=str_replace(",","\t",$referenceString);
+					$referenceString=str_replace("\n","",$referenceString);
 					$ref=explode(",",$result);
 				//	echo $ref;
 					//$ref=array(50,50,50,50,50);
@@ -365,7 +378,8 @@ if(1 || $scpiServerCheckFlag===true  ){
 					for($z=0;$z<$points;$z++){
 						$temp=$temp."0\t";
 					}
-					fwrite($fp,$temp."\n");
+					//fwrite($fp,$temp."\n");
+					fwrite($fp,"$temp\n");
 					outputProgress(((2*$i+1)*($j+1))/2,1*64,2*$i,$j);
 				//	//print_r($ref);
 				}
@@ -394,6 +408,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				//sleep(1);
 			}//phase shifter loop ends here 
 			fclose($fp);
+			fclose($fileLogger);
 			$fullFilePath=$dirName.'/'.$filename;
 			exec('/usr/bin/python /var/www/automation/rms.py "'.$fullFilePath.'"');  
 		}//attenuator loop ends here
@@ -657,6 +672,12 @@ if(1 || $scpiServerCheckFlag===true  ){
 				$result="";
 				//sendSocketCommand("INITiate1;*OPC?") ;
                  //               sleep(0.5);
+				if($j == 0){
+                                        for($myIter=0;$myIter<3;$myIter++){
+                                                sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
+                                                sendandReceiveSocket("CALCulate1:DATA? FDATA",$result);
+                                        }
+                                }
 				sendSocketCommand("CALCulate1:PARameter:SELect 'Meas1_Phase'");
 				//if($j==0){
                                   //  for($k=0;$k<1;$k++){

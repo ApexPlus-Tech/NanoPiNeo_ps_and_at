@@ -44,8 +44,6 @@ $zipFile=new GoodZipArchive('/var/www/automation/boards/'. $folderName,$zipFileN
 header('Content-Type: application/zip');
 header('Content-Disposition: attachment; filename = "'.basename($zipFileName).'"');
 header('Content-Length: ' . filesize($zipFileName));
-//header("Location:"."/boards/".basename($zipFileName)) or die("Could not open zip file");
 readfile($zipFileName);
 unlink($zipFileName);
-//exec('rm -r /var/www/automation/boards/'.$folderName);
 ?>

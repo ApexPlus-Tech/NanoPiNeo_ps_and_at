@@ -18,7 +18,7 @@ rms=[[] for x in range(POINTS)]
 lines=lines[1:]
 #convert list of float to string
 ind=0
-for line in lines:
+for line in lines[1:]:
 	line=line.split("\t")
 	value=line[0]
 	line=line[1:]

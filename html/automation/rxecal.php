@@ -74,7 +74,7 @@ $points=$_POST['points'];
 sendSocketCommand("SENSe1:SWEep:POINts ".$points);
 
 //Enable Pulse Mode
-sendSocketCommand("SENS:SWE:PULS:MODE OFF");
+//sendSocketCommand("SENS:SWE:PULS:MODE OFF");
 $pulsewidth=$_POST['pulsewidth'];
 $dutycycle=$_POST['dutycycle'];
 		//echo $dutycycle;

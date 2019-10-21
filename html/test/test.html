@@ -1,0 +1,35 @@
+<html>
+<script src="/js/jquery.min.js"></script>
+	<script>
+	repeatTimer = 0;
+	function sendJSON(urlName, JSONObject, successFunction, errorFunction) {
+        //console.log("sendJSON called");
+        $.ajax({
+            url: urlName,
+            contentType: 'application/json',
+            data: JSON.stringify(JSONObject),
+            type: 'POST',
+            success: successFunction,
+            error: errorFunction
+        });
+    	}	
+	setTimeout(function repeat(){
+		sendJSON("/test/progress.txt",{},
+		function (resp){
+			console.log(resp);
+			var respArray = resp.split("\n");
+			if(respArray.length < 2)
+				return
+			var lastEntry = respArray[respArray.length - 2];
+			if (lastEntry == "99"){
+				console.log("ENDED");
+				clearTimeout(repeatTimer);	
+			}
+		},
+		function (){
+			console.log("ERROR")
+		});
+		repeatTimer = setTimeout(repeat,3000);
+		},3000);
+	</script>
+</html>

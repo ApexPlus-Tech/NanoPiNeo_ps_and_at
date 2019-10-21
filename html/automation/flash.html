@@ -1,0 +1,178 @@
+<html>
+ <style type="text/css">
+                .footer1{
+                position:fixed;
+                text-align:right;
+                bottom:0px;
+                width:100%;
+                /*color:red*/
+                }
+                .footer2{
+                position:fixed
+                text-align:left;
+                bottom:0px;
+                width:100%
+                }
+                .mycolor{
+                        background-color:orange;
+                }
+</style>
+
+<script src="/js/jquery.min.js"></script>
+	<script>
+	repeatTimer = 0;
+	showProgress.free = false;
+
+	function sendJSON(urlName, JSONObject, successFunction, errorFunction) {
+        //console.log("sendJSON called");
+        $.ajax({
+            url: urlName,
+            contentType: 'application/json',
+            data: JSON.stringify(JSONObject),
+            type: 'POST',
+            success: successFunction,
+            error: errorFunction
+        });
+    	}	
+	function showProgress(){
+	 if(showProgress.free == true){
+	   setTimeout(function repeat(){
+		showProgress.free = false;
+		sendJSON("/automation/flash_progress.json",{},
+		function (resp){
+			console.log(resp);
+			//var respArray = resp.split("\n");
+			//if(respArray.length < 2)
+			//	return
+			//var lastEntry = respArray[respArray.length - 2];
+			//if (lastEntry == "99"){
+			//	console.log("ENDED");
+			//	clearTimeout(repeatTimer);	
+			//}
+			if(typeof resp['progress'] == "undefined")
+				return
+			$('#console').html("<font size='5px'>"+resp['type']+", PROGRESS:"+resp['progress']+"%</font>");
+			if(resp['finished'] == "true"){
+				$('#console').html("<font color='blue' size='5px'>"+resp['type']+" Completed</font>");
+				clearTimeout(repeatTimer);
+				showProgress.free = true ;
+			}
+		},
+		function (){
+			console.log("ERROR")
+		});
+		repeatTimer = setTimeout(repeat,3000);
+	      	},3000);
+          }
+	}
+        
+        function gen_160(){
+		//make ajax call
+		sendJSON("/automation/gen_160.php",{},
+		function(resp){
+		     console.log("POST SUCCESS");
+		     alert("FINISHED");
+	        },
+		function(){
+		     console.log("ERROR");
+		})
+		showProgress.free = true;
+                showProgress();
+                console.log("Showing progress");
+	}
+	
+	function down_160(){
+	 window.location = "/automation/down_160.php";
+	}
+	
+	function flas_160(){
+		//make ajax call
+                sendJSON("/automation/flas_160.php",{},
+                function(resp){
+                     console.log("POST SUCCESS");
+                     alert("FINISHED");
+                },
+                function(){
+                     console.log("ERROR");
+                });
+                showProgress.free = true;
+                showProgress();
+                console.log("Showing progress");
+          }
+	
+	function read_freq(){
+		//make ajax call
+                sendJSON("/automation/flash_read.php",{},
+                function(resp){
+                     console.log("POST SUCCESS");
+                     alert("FINISHED");
+                },
+                function(){
+                     console.log("ERROR");
+                });
+                showProgress.free = true;
+                showProgress();
+                console.log("Showing progress");
+	}
+	
+	function get_freq(){
+         window.location = "/automation/down_final.php";
+        }
+
+	function isInt(arg){
+		if(parseInt(arg) == arg)
+			return true;
+		else
+			return false;
+	}
+	function set_freq(){
+		var start_freq = $('#freq_start').val();
+		var stop_freq  = $('#freq_stop').val();
+		console.log(start_freq);
+		console.log(stop_freq);
+		if(!isInt(start_freq) || !(isInt(stop_freq)) ){
+			alert("Start and stop frequency must be integers");
+			return;
+		}	
+		if(!(start_freq>=0 && stop_freq<=159)){
+			alert('Frequency range must be 0 to 159 ');
+			return;
+		}	
+		var JSONobj={};
+		JSONobj['start']=start_freq;
+		JSONobj['stop'] =stop_freq;
+		sendJSON("/automation/freq_range.php",JSONobj,
+		function(){
+			alert("successfully set range");
+		},
+		function(){
+			console.log("could not set freq range");
+		}
+		);
+	}
+	</script>
+	<fieldset style="width:500px">
+	<legend>Flash writing</legend>
+	<button id="generate_160" onclick="gen_160();" > Generate 160 files</button>
+	<button id="download_160" onclick="down_160();">Download 160 files</button></br></br>
+	<button id="flash_160"    onclick="flas_160();">Flash 160 files</button></br></br>
+	</fieldset>
+	<br><br>
+	<fieldset style="width:500px">
+	<legend>Flash reading</legend>
+	Frequency start number<input id="freq_start" placeholder="0"></input></br></br>
+	Frequency end   number&nbsp;<input id="freq_stop" placeholder="159"></input></br></br>
+	<button id="set_freq" onclick="set_freq();" >Set frequency</button></br></br>
+	<button id="down_freq" onclick="read_freq();" >Read frequency data</button>
+	<button id="down_freq" onclick="get_freq();" >Download frequency data</button><br/><br/>
+	</fieldset>
+	<br><br>
+	Console
+	<pre>
+	<div id="console" style="overflow-y:scroll;height:200px;width:500px;border:1px solid black"></div>
+	</pre>
+	<div class="footer1">
+        <strong>ApexPlus Technologies</strong>
+        <br>Software Version 3.2
+	</div>
+</html>

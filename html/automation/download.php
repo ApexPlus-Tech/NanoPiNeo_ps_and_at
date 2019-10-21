@@ -35,7 +35,7 @@ class GoodZipArchive extends ZipArchive
 }
 
 session_start();
-$f=fopen("/var/www/automation/session.txt",'r') or die("Could not open file.");
+$f=fopen("/var/www/automation/download.txt",'r') or die("Could not open file.");
 $line=fgets($f);
 $line=str_replace(array("\n","\r"),'', $line);
 $folderName=$line;
@@ -44,8 +44,6 @@ $zipFile=new GoodZipArchive('/var/www/automation/boards/'. $folderName,$zipFileN
 header('Content-Type: application/zip');
 header('Content-Disposition: attachment; filename = "'.basename($zipFileName).'"');
 header('Content-Length: ' . filesize($zipFileName));
-//header("Location:"."/boards/".basename($zipFileName)) or die("Could not open zip file");
 readfile($zipFileName);
 unlink($zipFileName);
-//exec('rm -r /var/www/automation/boards/'.$folderName);
 ?>
