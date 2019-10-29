@@ -24,7 +24,10 @@ if (empty($host) ){ //if the string is empty i.e. session has expired
  */
 //
 function outputProgress($current, $total,$attenuator,$phaseShifter) {
-    echo "<span style='position: absolute;z-index:$current;background:#FFF;'>" ."Attenuator:".$attenuator." PhaseShifter:".$phaseShifter." Progress:".round($current / $total * 100) . "% </span>";
+    if(isset($_POST['resume'])){
+	$string="Resuming for measurement <font color='blue'>".basename($GLOBALS['dirName'])."</font> for channel <font color='blue'>".$GLOBALS['channelFunction']."</font> <br>";	
+    }
+    echo "<span style='position: absolute;z-index:$current;background:#FFF;'>$string PhaseShifter:".$phaseShifter." Progress:".round($current / $total * 100) . "% </span>";
     myFlush();
     //sleep(1);
 }
@@ -49,7 +52,7 @@ function sendandReceiveSocket($cmdString,&$result){
 	//
 	//Edit these lines  
 	//it has sent the command to SCPI server 
-	socket_write($socket, $command, strlen($command)) or die("Could not send data to server\n");
+	socket_write($socket, $command, strlen($command))  or die("Could not send data to server\n");
 	//$result="";
 	//$result=socket_read($socket,1024);
 	socket_recv($socket, $result,16384,MSG_WAITALL);
@@ -81,21 +84,46 @@ $port=5025;   //here the port no is 5025.it is not random
 	//SCPI is a protocol built over top of TCP which listens on specific port ,which is 5025 or 5024 by default
 	//So ,I have created a tcp socket for iv4
 	//SOCK_STREAM is for TCP and SOCK_DGRAM is for UDP
-$socket = socket_create(AF_INET, SOCK_STREAM, 0) or die("Could not create socket\n");  //it creates a tcp socket
+$socket = socket_create(AF_INET, SOCK_STREAM, 0)  or die("Could not create socket\n");  //it creates a tcp socket
 
 
 socket_set_option($socket,SOL_SOCKET, SO_RCVTIMEO, array("sec"=>1, "usec"=>0));  //    if it doesn,t get reply from server it will close its connection after 5 sec
-$result = socket_connect($socket, $host, $port) or die("Could not connect to server\n");   //it has connected to server and stores its connection link in result
+$result = socket_connect($socket, $host, $port)  or die("Could not connect to server\n");   //it has connected to server and stores its connection link in result
 $channelFunction=$_POST['channel'];
-//create a folder 
-$directory=$_POST['folder'];
-//write the name 
-$f=fopen("/var/www/automation/session.txt",'w') or die("Could not open text file ");
-fwrite($f,$directory);
-fclose($f);
-$dirName="/var/www/automation/boards/".$directory;
-if(!is_dir($dirName)){
+$resumeFlag = 0;
+if(isset($_POST['resume'])){
+	$resumeFlag =1;
+	//get the folder name
+	$f=file("/var/www/automation/session.txt") or die("Could not open session text file");
+	$dirName = str_replace(array("\r","\n"),"",$f[0]);
+	$dirName="/var/www/automation/boards/".$dirName;
+	//read resume progress
+        $fp_resume=file("/var/www/automation/resume.txt") or die("Could not open resume text file");
+        $resume_progress = str_replace(array("\r","\n"),"",$fp_resume[0]);
+	$fp_channel=file("/var/www/automation/channel.txt") or die("Could not open channel text file");
+        $channelFunction = str_replace(array("\r","\n"),"",$fp_channel[0]);
+	//delete the last file
+	exec("rm $dirName/Phase".$resume_progress.".txt");
+	//die("Resume progress:".$resume_progress);
+	$warmUp = 1;
+}
+else{
+	//create a folder 
+	$directory=$_POST['folder'];
+	//write the name 
+	$file_pointer=fopen("/var/www/automation/session.txt",'w') or die("Could not open session text file ");
+	fwrite($file_pointer,$directory);
+	fclose($file_pointer);
+	$dirName="/var/www/automation/boards/".$directory;
+	if(!is_dir($dirName)){
 		mkdir($dirName,0777,true);
+	}
+	$f=fopen("/var/www/automation/channel.txt",'w') or die("Could not open channel text file ");
+        fwrite($f,$channelFunction);
+        fclose($f);
+	$resume_progress=0;
+	$warmUp=$_POST["warmUp"];
+	$warmUp=intval($warmUp);
 }
 //echo $channelFunction;
 //set TRP GUI mode 
@@ -111,8 +139,6 @@ $result="";
 //check if the result contains a PNA in the output
 $result=strtolower($result);
 $scpiServerCheckFlag=strpos($result,"pna");
-$warmUp=$_POST["warmUp"];
-$warmUp=intval($warmUp);
 //Note use === instead of ==
 if(1 || $scpiServerCheckFlag===true  ){
   if(isset($channelFunction)){
@@ -129,7 +155,12 @@ if(1 || $scpiServerCheckFlag===true  ){
 		//sendSocketCommand("SENS1:PULS1 1");
 		sendSocketCommand("sense1:correction:cset:activate 'Tx_Ecal_Pulse',1");
 		sleep($warmUp);
-		for($i=0;$i<1;$i++){
+		for($i=$resume_progress;$i<1;$i++){
+			//write the name
+			//write the name
+        		$resume_file=fopen("/var/www/automation/resume.txt",'w') or die("Could not open text file ");
+        		fwrite($resume_file,$i);
+        		fclose($resume_file);
 			$filename="Phase".$i.".txt";
 			$fp=fopen($dirName."/".$filename,'a');
 			$delta=($stopFreq-$startFreq)/($points-1);
@@ -175,7 +206,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				fwrite($fp,"\t".$result."\n");
 
 
-				outputProgress((($i+1)*(2*$j+1)),64,2*$j,$i);
+				outputProgress((($i+1)),4,2*$j,$i);
 				}
 				fclose($fp);
 			}//Phase shifter for loop ends here 
@@ -191,7 +222,10 @@ if(1 || $scpiServerCheckFlag===true  ){
 		//sendSocketCommand("OUTP ON");
 		sendSocketCommand("sense1:correction:cset:activate 'Rx_Ecal_Pulse',1");
 		sleep($warmUp);
-		for($i=0;$i<4;$i++){
+		for($i=$resume_progress;$i<4;$i++){
+			$resume_file=fopen("/var/www/automation/resume.txt",'w') or die("Could not open text file ");
+                        fwrite($resume_file,$i);
+                        fclose($resume_file);
 			$filename="Phase".$i.".txt";
 			$fp=fopen($dirName."/".$filename,'a');
 			$delta=($stopFreq-$startFreq)/($points-1);
@@ -239,7 +273,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				fwrite($fp,"\t".$result."\n");
 
 
-				outputProgress((($i+1)*(2*$j+1)),4*4,2*$j,$i);
+				outputProgress((($i+1)),4,2*$j,$i);
 				}
 				fclose($fp);
 			}//Phase shifter for loop ends here 
@@ -257,7 +291,10 @@ if(1 || $scpiServerCheckFlag===true  ){
 		sendSocketCommand("sense1:correction:cset:activate 'Tx_Ecal_Pulse',1");
 		sleep($warmUp);
 		
-		for($i=0;$i<1;$i++){
+		for($i=$resume_progress;$i<1;$i++){
+			$resume_file=fopen("/var/www/automation/resume.txt",'w') or die("Could not open text file ");
+                        fwrite($resume_file,$i);
+                        fclose($resume_file);
 			$filename="Phase".$i.".txt";
 			$fp=fopen($dirName."/".$filename,'a');
 			$delta=($stopFreq-$startFreq)/($points-1);
@@ -303,7 +340,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				fwrite($fp,"\t".$result."\n");
 
 
-				outputProgress((($i+1)*(2*$j+1)),64,2*$j,$i);
+				outputProgress((($i+1)),4,2*$j,$i);
 				}
 				fclose($fp);
 			}//Phase shifter for loop ends here 
@@ -319,7 +356,10 @@ if(1 || $scpiServerCheckFlag===true  ){
                 //sendSocketCommand("SENS1:SWE:POINts 5");
 		//sendSocketCommand("OUTP ON");
 		sleep($warmUp);
-		for($i=0;$i<4;$i++){
+		for($i=$resume_progress;$i<4;$i++){
+			$resume_file=fopen("/var/www/automation/resume.txt",'w') or die("Could not open text file ");
+                        fwrite($resume_file,$i);
+                        fclose($resume_file);
 			$filename="Phase".$i.".txt";
 			$fp=fopen($dirName."/".$filename,'a');
 			$delta=($stopFreq-$startFreq)/($points-1);
@@ -360,7 +400,7 @@ if(1 || $scpiServerCheckFlag===true  ){
 				$result=str_replace(",","\t",$result);
 				fwrite($fp,"\t".$result."\n");
 				
-				outputProgress((($i+1)*(2*$j+1)),4*4,2*$j,$i);
+				outputProgress((($i+1)),4,2*$j,$i);
 				}
 				fclose($fp);
 			}//Phase shifter for loop ends here 
