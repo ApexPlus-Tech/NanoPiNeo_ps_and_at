@@ -118,6 +118,9 @@ else{
 	if(!is_dir($dirName)){
 		mkdir($dirName,0777,true);
 	}
+	else{
+		die("Board name ".basename($dirName)." exists.Please choose another name");
+	}
 	$f=fopen("/var/www/automation/channel.txt",'w') or die("Could not open channel text file ");
         fwrite($f,$channelFunction);
         fclose($f);
